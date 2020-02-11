@@ -14,4 +14,7 @@
     <string name="edt_route_name">Route Name</string>
     <string name="edt_start_location">Start Location</string>
     <string name="edt_end_location">End Location</string>
+    <string name="notification_push_setting_enable">Enabled Push Notifications</string>
+    <string name="notification_push_setting_disable">Disabled Push Notifications</string>
+
 </resources>
