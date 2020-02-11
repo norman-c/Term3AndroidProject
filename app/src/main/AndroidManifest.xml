@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RouteDetailActivity"></activity>
+        <activity android:name=".NotificationsActivity"></activity>
+        <activity android:name=".RouteDetailActivity" />
         <activity android:name=".ViewObstructionsActivity" />
         <activity android:name=".AddRouteActivity" />
         <activity android:name=".ViewRoutesActivity" />

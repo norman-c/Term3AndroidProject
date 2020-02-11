@@ -80,8 +80,8 @@ public class MainActivity extends AppCompatActivity
                         Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_notification:
-                Toast.makeText(this, "Notification clicked..",
-                        Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, NotificationsActivity.class);
+                startActivity(intent);
                 break;
             case R.id.menu_about:
                 Toast.makeText(this, "About clicked..",
