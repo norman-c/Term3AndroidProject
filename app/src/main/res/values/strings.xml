@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">AvoidIt</string>
+    <string name="drawer_open">drawer_open</string>
+    <string name="drawer_close">drawer_close</string>
+    <string name="btn_view_routes">View Your Routes</string>
+    <string name="btn_add_route">Add Route</string>
+    <string name="btn_view_obstructions">View Obstructions</string>
+    <string name="menu_language">Language</string>
+    <string name="menu_dark_mode">Dark Mode</string>
+    <string name="menu_metric">Metric (km / mi)</string>
+    <string name="menu_notification">Notification Settings</string>
+    <string name="menu_about">About the App</string>
+    <string name="txt_view_location">View Location</string>
+    <string name="edt_route_name">Route Name</string>
+    <string name="edt_start_location">Start Location</string>
+    <string name="edt_end_location">End Location</string>
+</resources>
