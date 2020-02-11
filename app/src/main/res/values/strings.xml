@@ -11,9 +11,22 @@
     <string name="menu_notification">Notification Settings</string>
     <string name="menu_about">About the App</string>
     <string name="txt_view_location">View Location</string>
+
     <string name="edt_route_name">Route Name</string>
     <string name="edt_start_location">Start Location</string>
     <string name="edt_end_location">End Location</string>
+
+    <string name="edt_time">Time</string>
+    <string name="route_view_status">Current Status: On Fire</string>
+    <string name="route_view_notifications">Notifications Enabled</string>
+    <string name="route_view_time_to_send">Time to Send Notification</string>
+    <string name="btn_save_changes">Save Changes</string>
+    <string name="btn_delete_route">Delete Route</string>
+    <string name="btn_s">S</string>
+    <string name="btn_m">M</string>
+    <string name="btn_t">T</string>
+    <string name="btn_w">W</string>
+    <string name="btn_f">F</string>
     <string name="notification_push_setting_enable">Enabled Push Notifications</string>
     <string name="notification_push_setting_disable">Disabled Push Notifications</string>
 
