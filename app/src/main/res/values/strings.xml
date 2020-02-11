@@ -14,4 +14,11 @@
     <string name="edt_route_name">Route Name</string>
     <string name="edt_start_location">Start Location</string>
     <string name="edt_end_location">End Location</string>
+    <string name="txt_route_name">Route Name</string>
+    <string name="txt_from">FROM</string>
+    <string name="txt_start">(start)</string>
+    <string name="txt_to">TO</string>
+    <string name="txt_end">(end)</string>
+    <string name="txt_status">Status: </string>
+    <string name="txt_set_status">Clear</string>
 </resources>
