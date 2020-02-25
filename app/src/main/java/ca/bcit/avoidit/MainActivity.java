@@ -17,6 +17,11 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+import ca.bcit.avoidit.model.Hazard;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -62,7 +67,27 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        RetrofitClientInstance client = RetrofitClientInstance.getClient().create(RetrofitClientInstance.class);
+        APIInterface apiInterface = RetrofitClientInstance.getClient()
+                .create(APIInterface.class);
+
+        Call<Hazard> call = apiInterface
+                .getHazardData("road-ahead-current-road-closures", "comp_date");
+
+        System.out.println("====== call url : " + call.request().url().toString());
+
+        call.enqueue(new Callback<Hazard>() {
+            @Override
+            public void onResponse(Call<Hazard> call, Response<Hazard> response) {
+//                fields = response.body().getFields();
+            }
+
+            @Override
+            public void onFailure(Call<Hazard> call, Throwable t) {
+
+            }
+        });
+
+
     }
 
 
