@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+
+        RetrofitClientInstance client = RetrofitClientInstance.getClient().create(RetrofitClientInstance.class);
     }
 
 
