@@ -1,54 +1,58 @@
 package ca.bcit.avoidit.model;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Hazard {
 
-    @SerializedName("datasetid")
+    @SerializedName("nhits")
     @Expose
-    private String datasetid;
+    private int nhits;
 
-    @SerializedName("recordid")
+    @SerializedName("parameters")
     @Expose
-    private String recordid;
+    private Parameters parameters;
 
-    @SerializedName("fields")
+    @SerializedName("records")
     @Expose
-    private Fields fields;
+    private ArrayList<Record> records;
 
-    @SerializedName("record_timestamp")
+    @SerializedName("facet_groups")
     @Expose
-    private String record_timestamp;
+    private FacetGroups facet_groups;
 
-    public String getDatasetid() {
-        return datasetid;
+    public int getNhits() {
+        return nhits;
     }
 
-    public void setDatasetid(String datasetid) {
-        this.datasetid = datasetid;
+    public void setNhits(int nhits) {
+        this.nhits = nhits;
     }
 
-    public String getRecordid() {
-        return recordid;
+    public Parameters getParameters() {
+        return parameters;
     }
 
-    public void setRecordid(String recordid) {
-        this.recordid = recordid;
+    public void setParameters(Parameters parameters) {
+        this.parameters = parameters;
     }
 
-    public Fields getFields() {
-        return fields;
+    public ArrayList<Record> getRecords() {
+        return records;
     }
 
-    public void setFields(Fields fields) {
-        this.fields = fields;
+    public void setRecords(ArrayList<Record> records) {
+        this.records = records;
     }
 
-    public String getRecord_timestamp() {
-        return record_timestamp;
+    public FacetGroups getFacet_groups() {
+        return facet_groups;
     }
 
-    public void setRecord_timestamp(String record_timestamp) {
-        this.record_timestamp = record_timestamp;
+    public void setFacet_groups(FacetGroups facet_groups) {
+        this.facet_groups = facet_groups;
     }
 }

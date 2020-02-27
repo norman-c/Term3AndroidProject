@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +18,14 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import ca.bcit.avoidit.model.Fields;
 import ca.bcit.avoidit.model.Hazard;
+import ca.bcit.avoidit.model.Record;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -78,12 +86,17 @@ public class MainActivity extends AppCompatActivity
         call.enqueue(new Callback<Hazard>() {
             @Override
             public void onResponse(Call<Hazard> call, Response<Hazard> response) {
-//                fields = response.body().getFields();
+                System.out.println("================== Success but...");
+                ArrayList<Record> records = response.body().getRecords();
+                System.out.println("================== Success");
+//                for(int i = 0; i < records.size(); i++){
+//                    System.out.println(records.get(i));
+//                }
             }
 
             @Override
             public void onFailure(Call<Hazard> call, Throwable t) {
-
+                Log.e("out", t.toString());
             }
         });
 

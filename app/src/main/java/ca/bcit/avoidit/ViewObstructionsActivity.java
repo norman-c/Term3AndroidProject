@@ -1,7 +1,5 @@
 package ca.bcit.avoidit;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,7 +9,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import ca.bcit.avoidit.model.Hazard;
+import ca.bcit.avoidit.model.Record;
 
 public class ViewObstructionsActivity extends ListActivity {
 
@@ -20,7 +18,7 @@ public class ViewObstructionsActivity extends ListActivity {
         super.onCreate(savedInstanceState);
 
         //extract a string from a hazard
-        ArrayList<Hazard> hazardList = new ArrayList<>();
+        ArrayList<Record> hazardList = new ArrayList<>();
         ArrayList<String> hazardStringList = new ArrayList<>();
         //TODO: extraction code from hazards goes here, but for now we have temp stuff
         hazardStringList.add("one");

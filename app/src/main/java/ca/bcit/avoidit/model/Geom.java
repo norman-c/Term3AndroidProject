@@ -3,6 +3,9 @@ package ca.bcit.avoidit.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Geom {
 
     @SerializedName("type")
@@ -11,7 +14,7 @@ public class Geom {
 
     @SerializedName("coordinates")
     @Expose
-    private Coordinates coordinates;
+    private ArrayList<Coordinate> coordinates;
 
     public String getType() {
         return type;
@@ -21,11 +24,11 @@ public class Geom {
         this.type = type;
     }
 
-    public Coordinates getCoordinates() {
+    public ArrayList<Coordinate> getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(Coordinates coordinates) {
+    public void setCoordinates(ArrayList<Coordinate> coordinates) {
         this.coordinates = coordinates;
     }
 }
