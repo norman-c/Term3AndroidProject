@@ -19,11 +19,11 @@ public class Fields {
 
     @SerializedName("url_link")
     @Expose
-    private String url_link;
+    private String urlLink;
 
     @SerializedName("comp_date")
     @Expose
-    private String comp_date;
+    private String compDate;
 
     public String getProject() {
         return project;
@@ -49,19 +49,19 @@ public class Fields {
         this.location = location;
     }
 
-    public String getUrl_link() {
-        return url_link;
+    public String getUrlLink() {
+        return urlLink;
     }
 
-    public void setUrl_link(String url_link) {
-        this.url_link = url_link;
+    public void setUrlLink(String urlLink) {
+        this.urlLink = urlLink;
     }
 
-    public String getComp_date() {
-        return comp_date;
+    public String getCompDate() {
+        return compDate;
     }
 
-    public void setComp_date(String comp_date) {
-        this.comp_date = comp_date;
+    public void setCompDate(String compDate) {
+        this.compDate = compDate;
     }
 }

@@ -3,23 +3,23 @@ package ca.bcit.avoidit.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class FacetGroups {
+public class FacetGroup {
 
     @SerializedName("facets")
     @Expose
-    private ArrayList<Facet> facets;
+    private List<Facet> facets;
 
     @SerializedName("name")
     @Expose
     private String name;
 
-    public ArrayList<Facet> getFacets() {
+    public List<Facet> getFacets() {
         return facets;
     }
 
-    public void setFacets(ArrayList<Facet> facets) {
+    public void setFacets(List<Facet> facets) {
         this.facets = facets;
     }
 

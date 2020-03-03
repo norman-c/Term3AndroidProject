@@ -3,7 +3,7 @@ package ca.bcit.avoidit.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Parameters {
 
@@ -25,7 +25,7 @@ public class Parameters {
 
     @SerializedName("facet")
     @Expose
-    private ArrayList<String> facet;
+    private List<String> facet;
 
     public String getDataset() {
         return dataset;
@@ -59,11 +59,11 @@ public class Parameters {
         this.format = format;
     }
 
-    public ArrayList<String> getFacet() {
+    public List<String> getFacet() {
         return facet;
     }
 
-    public void setFacet(ArrayList<String> facet) {
+    public void setFacet(List<String> facet) {
         this.facet = facet;
     }
 }

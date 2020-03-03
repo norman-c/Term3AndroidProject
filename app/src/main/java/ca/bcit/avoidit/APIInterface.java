@@ -1,5 +1,7 @@
 package ca.bcit.avoidit;
 
+import java.util.List;
+
 import ca.bcit.avoidit.model.Hazard;
 import retrofit2.Call;
 import retrofit2.http.GET;

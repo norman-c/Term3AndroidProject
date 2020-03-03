@@ -18,12 +18,8 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.List;
 
-import ca.bcit.avoidit.model.Fields;
 import ca.bcit.avoidit.model.Hazard;
 import ca.bcit.avoidit.model.Record;
 import retrofit2.Call;
@@ -79,15 +75,16 @@ public class MainActivity extends AppCompatActivity
                 .create(APIInterface.class);
 
         Call<Hazard> call = apiInterface
-                .getHazardData("road-ahead-current-road-closures", "comp_date");
+                .getHazardData("road-ahead-current-road-closures",
+                        "comp_date");
 
         System.out.println("====== call url : " + call.request().url().toString());
 
-        call.enqueue(new Callback<Hazard>() {
+        call.enqueue(new Callback<Hazard> () {
             @Override
             public void onResponse(Call<Hazard> call, Response<Hazard> response) {
                 System.out.println("================== Success but...");
-                ArrayList<Record> records = response.body().getRecords();
+                List<Record> records = response.body().getRecords();
                 System.out.println("================== Success");
 //                for(int i = 0; i < records.size(); i++){
 //                    System.out.println(records.get(i));

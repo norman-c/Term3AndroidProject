@@ -3,8 +3,7 @@ package ca.bcit.avoidit.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import java.util.List;
 
 public class Hazard {
 
@@ -18,11 +17,11 @@ public class Hazard {
 
     @SerializedName("records")
     @Expose
-    private ArrayList<Record> records;
+    private List<Record> records;
 
     @SerializedName("facet_groups")
     @Expose
-    private FacetGroups facet_groups;
+    private List<FacetGroup> facetGroups;
 
     public int getNhits() {
         return nhits;
@@ -40,19 +39,19 @@ public class Hazard {
         this.parameters = parameters;
     }
 
-    public ArrayList<Record> getRecords() {
+    public List<Record> getRecords() {
         return records;
     }
 
-    public void setRecords(ArrayList<Record> records) {
+    public void setRecords(List<Record> records) {
         this.records = records;
     }
 
-    public FacetGroups getFacet_groups() {
-        return facet_groups;
+    public List<FacetGroup> getFacetGroups() {
+        return facetGroups;
     }
 
-    public void setFacet_groups(FacetGroups facet_groups) {
-        this.facet_groups = facet_groups;
+    public void setFacetGroups(List<FacetGroup> facetGroups) {
+        this.facetGroups = facetGroups;
     }
 }

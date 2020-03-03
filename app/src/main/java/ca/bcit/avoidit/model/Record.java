@@ -18,7 +18,7 @@ public class Record {
 
     @SerializedName("record_timestamp")
     @Expose
-    private String record_timestamp;
+    private String recordTimestamp;
 
     public String getDatasetid() {
         return datasetid;
@@ -44,11 +44,11 @@ public class Record {
         this.fields = fields;
     }
 
-    public String getRecord_timestamp() {
-        return record_timestamp;
+    public String getRecordTimestamp() {
+        return recordTimestamp;
     }
 
-    public void setRecord_timestamp(String record_timestamp) {
-        this.record_timestamp = record_timestamp;
+    public void setRecordTimestamp(String recordTimestamp) {
+        this.recordTimestamp = recordTimestamp;
     }
 }
