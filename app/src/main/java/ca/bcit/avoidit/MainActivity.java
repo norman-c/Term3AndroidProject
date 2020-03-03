@@ -86,9 +86,18 @@ public class MainActivity extends AppCompatActivity
                 System.out.println("================== Success but...");
                 List<Record> records = response.body().getRecords();
                 System.out.println("================== Success");
-//                for(int i = 0; i < records.size(); i++){
-//                    System.out.println(records.get(i));
-//                }
+                for(int i = 0; i < records.size(); i++){
+                    System.out.println(i);
+                    System.out.println(records.get(i).getFields().getProject());
+//                    if(geom instanceof List<List<Double>> ){
+//                        //Cast to List<List<Double>> and do stuff
+//
+//                    } else{
+//                        //Cast to list<List<List<Double>>> and do stuff
+//
+//                    }
+
+                }
             }
 
             @Override
