@@ -37,4 +37,6 @@
     <string name="txt_end">(end)</string>
     <string name="txt_status">Status: </string>
     <string name="txt_set_status">Clear</string>
+
+    <string name="txt_obstruction_project_name">Obstruction Project Name</string>
 </resources>

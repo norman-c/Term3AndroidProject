@@ -2,41 +2,68 @@ package ca.bcit.avoidit;
 
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
+import java.util.List;
 
+import ca.bcit.avoidit.model.Hazard;
 import ca.bcit.avoidit.model.Record;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class ViewObstructionsActivity extends ListActivity {
+public class ViewObstructionsActivity extends AppCompatActivity {
+
+    List<Record> records;
+
+    ListView obstruction_project_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_view_obstructions);
 
-        //extract a string from a hazard
-        ArrayList<Record> hazardList = new ArrayList<>();
-        ArrayList<String> hazardStringList = new ArrayList<>();
-        //TODO: extraction code from hazards goes here, but for now we have temp stuff
-        hazardStringList.add("one");
-        hazardStringList.add("two");
-        hazardStringList.add("three");
+        obstruction_project_list = findViewById(R.id.obstruction_project_list);
 
-        //add to listview
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_list_item_1, hazardStringList
-        );
+        APIInterface apiInterface = RetrofitClientInstance.getClient()
+                .create(APIInterface.class);
 
-        ListView obstructionList = getListView();
-        obstructionList.setAdapter(arrayAdapter);
+        Call<Hazard> call = apiInterface
+                .getHazardData("road-ahead-current-road-closures",
+                        "comp_date");
+
+        System.out.println("====== call url : " + call.request().url().toString());
+
+        call.enqueue(new Callback<Hazard>() {
+            @Override
+            public void onResponse(Call<Hazard> call, Response<Hazard> response) {
+                records = response.body().getRecords();
+
+                ObstructionListAdapter adapter =
+                        new ObstructionListAdapter(
+                                ViewObstructionsActivity.this, records);
+
+                obstruction_project_list.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure(Call<Hazard> call, Throwable t) {
+                Log.e("out", t.toString());
+            }
+        });
+
     }
 
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        Toast toast = Toast.makeText(getApplicationContext(), "Boop!", Toast.LENGTH_SHORT);
-        toast.show();
-    }
+//    @Override
+//    protected void onListItemClick(ListView l, View v, int position, long id) {
+//        Toast toast = Toast.makeText(getApplicationContext(), "Boop!", Toast.LENGTH_SHORT);
+//        toast.show();
+//    }
 }

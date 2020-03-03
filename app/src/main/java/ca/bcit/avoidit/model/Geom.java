@@ -14,7 +14,7 @@ public class Geom {
 
     @SerializedName("coordinates")
     @Expose
-    private java.lang.Object coordinates;
+    private Object coordinates;
 
     public String getType() {
         return type;
@@ -24,11 +24,11 @@ public class Geom {
         this.type = type;
     }
 
-    public java.lang.Object getCoordinates() {
+    public Object getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(java.lang.Object coordinates) {
+    public void setCoordinates(Object coordinates) {
         this.coordinates = coordinates;
     }
 }

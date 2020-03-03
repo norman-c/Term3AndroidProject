@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity
     ActionBarDrawerToggle drawerToggle;
     Toolbar toolbar;
 
+    List<Record> records;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,9 +85,7 @@ public class MainActivity extends AppCompatActivity
         call.enqueue(new Callback<Hazard> () {
             @Override
             public void onResponse(Call<Hazard> call, Response<Hazard> response) {
-                System.out.println("================== Success but...");
-                List<Record> records = response.body().getRecords();
-                System.out.println("================== Success");
+                records = response.body().getRecords();
                 for(int i = 0; i < records.size(); i++){
                     System.out.println(i);
                     System.out.println(records.get(i).getFields().getProject());
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity
 //                        //Cast to List<List<Double>> and do stuff
 //
 //                    } else{
-//                        //Cast to list<List<List<Double>>> and do stuff
+//                        //Cast to List<List<List<Double>>> and do stuff
 //
 //                    }
 
