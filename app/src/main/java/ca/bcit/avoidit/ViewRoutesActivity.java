@@ -25,8 +25,8 @@ import ca.bcit.avoidit.model.UserRoute;
 
 public class ViewRoutesActivity extends AppCompatActivity {
 
-    ListView listViewRoutes;
-    List<UserRoute> routeList;
+    ListView listViewRoutes; //The list view itself.
+    List<UserRoute> routeList; //The list of routes, extracted from Firebase.
 
     DatabaseReference database;
 
@@ -39,6 +39,18 @@ public class ViewRoutesActivity extends AppCompatActivity {
 
         listViewRoutes = findViewById(R.id.list_routes);
         routeList = new ArrayList<UserRoute>();
+
+        //Set on-click listeners for each item in the list.
+        listViewRoutes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(ViewRoutesActivity.this, RouteDetailActivity.class);
+                //set passed information based on the index of the item pressed
+
+                startActivity(intent);
+            }
+        });
+
 
         /*
         RoutesAdapter adapter = new RoutesAdapter();
