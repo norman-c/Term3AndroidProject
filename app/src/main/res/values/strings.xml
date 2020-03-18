@@ -39,4 +39,6 @@
     <string name="txt_set_status">Clear</string>
 
     <string name="txt_obstruction_project_name">Obstruction Project Name</string>
+
+    <string name="txt_error">Error!</string>
 </resources>

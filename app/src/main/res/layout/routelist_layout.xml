@@ -8,17 +8,20 @@
         android:id="@+id/textViewName"
         android:layout_width = "match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        style="@style/ListViewHeader"
+        android:text="@string/txt_error"/>
 
     <TextView
         android:id="@+id/textViewPointA"
         android:layout_width = "match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        style="@style/ListViewItem"
+        android:text="@string/txt_error"/>
 
     <TextView
         android:id="@+id/textViewPointB"
         android:layout_width = "match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        style="@style/ListViewItem"
+        android:text="@string/txt_error"/>
 </LinearLayout>

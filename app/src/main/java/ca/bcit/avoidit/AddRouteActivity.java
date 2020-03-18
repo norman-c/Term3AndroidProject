@@ -16,6 +16,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.time.LocalTime;
+import java.util.ArrayList;
+
 import ca.bcit.avoidit.model.UserRoute;
 
 public class AddRouteActivity extends AppCompatActivity {
@@ -54,6 +57,10 @@ public class AddRouteActivity extends AppCompatActivity {
         String routeName = editName.getText().toString().trim();
         String routePointA = editPointA.getText().toString().trim();
         String routePointB = editPointB.getText().toString().trim();
+        ArrayList<Boolean> dayList = new ArrayList<Boolean>();
+        for (int i = 0; i < 7; i++) {
+            dayList.add(true);
+        }
 
         if (TextUtils.isEmpty(routeName)) {
             Toast.makeText(this, "You must enter a route name.", Toast.LENGTH_LONG).show();
@@ -71,7 +78,8 @@ public class AddRouteActivity extends AppCompatActivity {
         }
 
         String id = database.push().getKey();
-        UserRoute userRoute = new UserRoute(routeName, routePointA, routePointB);
+        UserRoute userRoute = new UserRoute(routeName, routePointA, routePointB, LocalTime.MIDNIGHT,
+                dayList, true);
 
         Task setValueTask = database.child(id).setValue(userRoute);
 
