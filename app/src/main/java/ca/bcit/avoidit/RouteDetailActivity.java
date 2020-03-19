@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.Switch;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class RouteDetailActivity extends AppCompatActivity {
     private String routeName;
     private String routePointA;
     private String routePointB;
-    private LocalTime notificationTime;
+    private String notificationTime;
     private ArrayList<Boolean> notificationDays;
     private Boolean notificationEnabled;
 
@@ -47,5 +48,13 @@ public class RouteDetailActivity extends AppCompatActivity {
 
         EditText fieldRoutePointB = findViewById(R.id.plaintext_end_location);
         fieldRoutePointB.setText(routePointB);
+
+        //TODO: set day buttons color based on day state
+
+        EditText fieldTime = findViewById((R.id.edittext_time));
+        fieldTime.setText(notificationTime);
+
+        Switch switchNotifications = findViewById(R.id.switch_notifications);
+        switchNotifications.setChecked(notificationEnabled);
     }
 }

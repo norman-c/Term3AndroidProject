@@ -15,14 +15,14 @@ public class UserRoute implements Serializable {
     private String routeName;
     private String routePointA;
     private String routePointB;
-    private LocalTime notificationTime;
+    private String notificationTime;
     private ArrayList<Boolean> notificationDays; //index 0 = sunday, index 1 = monday, index 6 = saturday
     private Boolean notificationEnabled;
 
     public UserRoute() {}
 
     public UserRoute(String inputID, String inputName, String inputPointA, String inputPointB,
-                     LocalTime inputTime, ArrayList<Boolean> inputDays, Boolean inputEnabled) {
+                     String inputTime, ArrayList<Boolean> inputDays, Boolean inputEnabled) {
         this.routeID = inputID;
         this.routeName = inputName;
         this.routePointA = inputPointA;
@@ -48,7 +48,7 @@ public class UserRoute implements Serializable {
         return routePointB;
     }
 
-    public LocalTime getNotificationTime() {
+    public String getNotificationTime() {
         return notificationTime;
     }
 
