@@ -1,5 +1,6 @@
 package ca.bcit.avoidit.model;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -9,7 +10,8 @@ import java.util.ArrayList;
  * Has defined days to notify the user, a defined time, and a flag to ask
  * whether it should make notifications or not.
  */
-public class UserRoute {
+public class UserRoute implements Serializable {
+    private String routeID;
     private String routeName;
     private String routePointA;
     private String routePointB;
@@ -19,14 +21,19 @@ public class UserRoute {
 
     public UserRoute() {}
 
-    public UserRoute(String inputName, String inputPointA, String inputPointB,
+    public UserRoute(String inputID, String inputName, String inputPointA, String inputPointB,
                      LocalTime inputTime, ArrayList<Boolean> inputDays, Boolean inputEnabled) {
+        this.routeID = inputID;
         this.routeName = inputName;
         this.routePointA = inputPointA;
         this.routePointB = inputPointB;
         this.notificationTime = inputTime;
         this.notificationDays = inputDays;
         this.notificationEnabled = inputEnabled;
+    }
+
+    public String getRouteID() {
+        return routeID;
     }
 
     public String getRouteName() {

@@ -57,6 +57,7 @@ public class AddRouteActivity extends AppCompatActivity {
         String routeName = editName.getText().toString().trim();
         String routePointA = editPointA.getText().toString().trim();
         String routePointB = editPointB.getText().toString().trim();
+        LocalTime notificationTime = LocalTime.MIDNIGHT;
         ArrayList<Boolean> dayList = new ArrayList<Boolean>();
         for (int i = 0; i < 7; i++) {
             dayList.add(true);
@@ -78,8 +79,8 @@ public class AddRouteActivity extends AppCompatActivity {
         }
 
         String id = database.push().getKey();
-        UserRoute userRoute = new UserRoute(routeName, routePointA, routePointB, LocalTime.MIDNIGHT,
-                dayList, true);
+        UserRoute userRoute = new UserRoute(id, routeName, routePointA, routePointB,
+                notificationTime, dayList, true);
 
         Task setValueTask = database.child(id).setValue(userRoute);
 

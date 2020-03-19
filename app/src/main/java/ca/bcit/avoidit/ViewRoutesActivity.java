@@ -38,15 +38,17 @@ public class ViewRoutesActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance().getReference("routes");
 
         listViewRoutes = findViewById(R.id.list_routes);
-        routeList = new ArrayList<UserRoute>();
+        routeList = new ArrayList<>();
 
         //Set on-click listeners for each item in the list.
         listViewRoutes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ViewRoutesActivity.this, RouteDetailActivity.class);
-                //set passed information based on the index of the item pressed
 
+                //set passed information based on the index of the item pressed
+                UserRoute routeUsed = routeList.get(position);
+                intent.putExtra("route", routeUsed);
                 startActivity(intent);
             }
         });
