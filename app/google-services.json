@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "865555349200",
+    "firebase_url": "https://avoidit-36e63.firebaseio.com",
+    "project_id": "avoidit-36e63",
+    "storage_bucket": "avoidit-36e63.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:865555349200:android:e1f6f8f1b054d7a85468d5",
+        "android_client_info": {
+          "package_name": "ca.bcit.avoidit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "865555349200-m6nf7sg7id2tglmvucdqosq65jvesr9g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ca.bcit.avoidit",
+            "certificate_hash": "c6623986bbb4d7a1648b3a3c7c6594fc91c0c750"
+          }
+        },
+        {
+          "client_id": "865555349200-t4ochnbtr1mjucu52hmh1rqj7dvqjmuk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6ky1OnmJOW0U9rmKGjFUdT_gl7y9i4xA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "865555349200-t4ochnbtr1mjucu52hmh1rqj7dvqjmuk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
