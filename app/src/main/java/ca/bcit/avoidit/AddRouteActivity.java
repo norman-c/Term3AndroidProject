@@ -86,7 +86,7 @@ public class AddRouteActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Object o) {
                 Toast.makeText(AddRouteActivity.this, "Route added!", Toast.LENGTH_LONG).show();
-                //TODO: navigate to route view page
+                finish();
             }
         });
 

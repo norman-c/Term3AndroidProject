@@ -22,4 +22,17 @@
         <item name="android:layout_marginLeft">20dp</item>
     </style>
 
+    <!-- A style for formatting an "active" notification day button. -->
+    <style name="DayButtonActive">
+        <item name="android:color">#ff0000</item>
+        <item name="android:textSize">12pt</item>
+    </style>
+
+    <!-- A style for formatting an "inactive" notification day button. -->
+    <style name="DayButtonInactive">
+        <item name="android:color">#666666</item>
+        <item name="android:textSize">10pt</item>
+    </style>
+
+
 </resources>
