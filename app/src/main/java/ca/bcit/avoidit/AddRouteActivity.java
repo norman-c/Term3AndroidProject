@@ -80,7 +80,6 @@ public class AddRouteActivity extends AppCompatActivity {
         String id = database.push().getKey();
         UserRoute userRoute = new UserRoute(id, routeName, routePointA, routePointB,
                 "12:00", dayList, true);
-
         Task setValueTask = database.child(id).setValue(userRoute);
 
         setValueTask.addOnSuccessListener(new OnSuccessListener() {
