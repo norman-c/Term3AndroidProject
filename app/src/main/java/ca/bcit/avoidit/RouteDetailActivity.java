@@ -118,11 +118,18 @@ public class RouteDetailActivity extends AppCompatActivity {
             });
         }
 
-        //assign a "save" function to the save button
+        //assign functions to save and delete
         Button saveRoute = findViewById(R.id.button_save_changes);
         saveRoute.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 editRoute();
+            }
+        });
+
+        Button deleteRoute = findViewById(R.id.button_delete_route);
+        deleteRoute.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                deleteRoute();
             }
         });
 
@@ -173,5 +180,24 @@ public class RouteDetailActivity extends AppCompatActivity {
                 Toast.makeText(RouteDetailActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void deleteRoute() {
+        Task removeValueTask = database.child(routeID).removeValue();
+        removeValueTask.addOnSuccessListener(new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                Toast.makeText(RouteDetailActivity.this, "Route deleted!", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        removeValueTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(RouteDetailActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        finish();
     }
 }
