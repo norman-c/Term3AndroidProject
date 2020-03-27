@@ -2,12 +2,15 @@ package ca.bcit.avoidit;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +22,7 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
+import java.util.Locale;
 
 import ca.bcit.avoidit.model.Hazard;
 import ca.bcit.avoidit.model.Record;
@@ -36,10 +40,34 @@ public class MainActivity extends AppCompatActivity
 
     List<Record> records;
 
+    static SharedPreferences sharedPreferences;
+    static SharedPreferences.Editor editor;
+
+    static boolean isDarkMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (isDarkMode == true) {
+            setTheme(R.style.AppThemeDark);
+        } else {
+            setTheme(R.style.AppThemeLight);
+            isDarkMode = false;
+        }
         setContentView(R.layout.activity_main);
+
+        sharedPreferences = getSharedPreferences("language", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+        String language = sharedPreferences.getString("language", "en");
+
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
+        MainActivity.this.setContentView(R.layout.activity_main);
 
         initLayout();
 
@@ -68,7 +96,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,
-                        ViewObstructionsActivity.class);
+                        ViewObstructionsOldActivity.class);
                 startActivity(intent);
             }
         });
@@ -105,10 +133,12 @@ public class MainActivity extends AppCompatActivity
                 Log.e("out", t.toString());
             }
         });
-
-
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -116,22 +146,103 @@ public class MainActivity extends AppCompatActivity
             case R.id.menu_language:
                 Toast.makeText(this, "Language clicked..",
                         Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder langBuilder =
+                        new AlertDialog.Builder(MainActivity.this);
+                langBuilder.setTitle("Language Change");
+                String[] langItems = {"English", "French"};
+                langBuilder.setSingleChoiceItems(langItems, -1,
+                        new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0:
+                                Toast.makeText(MainActivity.this,
+                                        "Clicked English", Toast.LENGTH_LONG).show();
+                                editor.putString("language", "en");
+                                editor.apply();
+                                recreate();
+                                dialog.dismiss();
+                            break;
+                            case 1:
+                                Toast.makeText(MainActivity.this,
+                                        "Clicked French", Toast.LENGTH_LONG).show();
+                                editor.putString("language", "fr");
+                                editor.apply();
+                                recreate();
+                                dialog.dismiss();
+                                break;
+                        }
+                    }
+                });
+                AlertDialog langDialog = langBuilder.create();
+                langDialog.setCanceledOnTouchOutside(false);
+                langDialog.show();
                 break;
             case R.id.menu_dark_mode:
                 Toast.makeText(this, "Dark_mode clicked..",
                         Toast.LENGTH_SHORT).show();
+                if(isDarkMode == true){
+                    isDarkMode = false;
+                }else{
+                    isDarkMode = true;
+                }
+                recreate();
                 break;
             case R.id.menu_metric:
                 Toast.makeText(this, "Metric clicked..",
                         Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder metricBuilder =
+                        new AlertDialog.Builder(MainActivity.this);
+                metricBuilder.setTitle("Metric Change");
+                String[] metricItems = {"km", "mi"};
+                metricBuilder.setSingleChoiceItems(metricItems, 0,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which){
+                                    case 0:
+                                        Toast.makeText(MainActivity.this,
+                                                "Clicked km", Toast.LENGTH_LONG).show();
+                                        dialog.dismiss();
+                                        break;
+                                    case 1:
+                                        Toast.makeText(MainActivity.this,
+                                                "Clicked mi", Toast.LENGTH_LONG).show();
+                                        dialog.dismiss();
+                                        break;
+                                }
+                            }
+                        });
+                AlertDialog metricDialog = metricBuilder.create();
+                metricDialog.setCanceledOnTouchOutside(false);
+                metricDialog.show();
                 break;
             case R.id.menu_notification:
-                Intent intent = new Intent(MainActivity.this, NotificationsActivity.class);
+                Intent intent = new Intent(MainActivity.this,
+                        NotificationsActivity.class);
                 startActivity(intent);
                 break;
             case R.id.menu_about:
                 Toast.makeText(this, "About clicked..",
                         Toast.LENGTH_SHORT).show();
+
+                final AlertDialog.Builder aboutBuilder =
+                        new AlertDialog.Builder(MainActivity.this);
+                aboutBuilder.setTitle("About the App\n");
+
+                final View aboutLayout = getLayoutInflater()
+                        .inflate(R.layout.about_layout, null);
+                aboutBuilder.setView(aboutLayout);
+
+                aboutBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog aboutDialog = aboutBuilder.create();
+                aboutDialog.show();
                 break;
         }
 

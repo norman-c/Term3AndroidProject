@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">L\'éviter</string>
+    <string name="btn_add_route">Ajouter un itinéraire</string>
+    <string name="btn_delete_route">Supprimer l\'itinéraire</string>
+    <string name="btn_save_changes">Sauvegarder les modifications</string>
+    <string name="btn_view_obstructions">" Afficher les obstructions"</string>
+    <string name="btn_view_routes">Afficher vos itinéraires</string>
+    <string name="edt_end_location">Fin Emplacement</string>
+    <string name="edt_route_name">Nom de l\'itinéraire</string>
+    <string name="edt_start_location">Lieu de départ</string>
+    <string name="edt_time">" Temps"</string>
+    <string name="menu_about">" À propos de l'application"</string>
+    <string name="menu_dark_mode">" Mode sombre"</string>
+    <string name="menu_language">" Langue"</string>
+    <string name="menu_metric">" Métrique (km / mi)"</string>
+    <string name="menu_notification">" Paramètres de notification"</string>
+    <string name="notification_push_setting_disable">Notifications push désactivées</string>
+    <string name="notification_push_setting_enable">" Notifications push activées"</string>
+    <string name="route_view_notifications">" Notifications activées"</string>
+    <string name="route_view_status">" État actuel: en feu"</string>
+    <string name="route_view_time_to_send">Délai d\'envoi de la notification</string>
+    <string name="txt_error">Erreur</string>
+    <string name="txt_from">" De"</string>
+    <string name="txt_obstruction_project_name">" Nom du projet d'obstruction"</string>
+    <string name="txt_route_name">" Nom de l'itinéraire"</string>
+    <string name="txt_set_status">Clair</string>
+    <string name="txt_start">(début)</string>
+    <string name="txt_status">" Statut:"</string>
+    <string name="txt_to">De</string>
+    <string name="txt_view_location">" Afficher l'emplacement"</string>
+    <string name="txt_end" translatable="false">(Le bout)</string>
+</resources>

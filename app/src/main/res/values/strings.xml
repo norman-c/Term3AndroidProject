@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">AvoidIt</string>
-    <string name="drawer_open">drawer_open</string>
-    <string name="drawer_close">drawer_close</string>
+    <string name="drawer_open" translatable="false">drawer_open</string>
+    <string name="drawer_close" translatable="false">drawer_close</string>
     <string name="btn_view_routes">View Your Routes</string>
     <string name="btn_add_route">Add Route</string>
     <string name="btn_view_obstructions">View Obstructions</string>
@@ -22,11 +22,11 @@
     <string name="route_view_time_to_send">Time to Send Notification</string>
     <string name="btn_save_changes">Save Changes</string>
     <string name="btn_delete_route">Delete Route</string>
-    <string name="btn_s">S</string>
-    <string name="btn_m">M</string>
-    <string name="btn_t">T</string>
-    <string name="btn_w">W</string>
-    <string name="btn_f">F</string>
+    <string name="btn_s" translatable="false">S</string>
+    <string name="btn_m" translatable="false">M</string>
+    <string name="btn_t" translatable="false">T</string>
+    <string name="btn_w" translatable="false">W</string>
+    <string name="btn_f" translatable="false">F</string>
     <string name="notification_push_setting_enable">Enabled Push Notifications</string>
     <string name="notification_push_setting_disable">Disabled Push Notifications</string>
 
