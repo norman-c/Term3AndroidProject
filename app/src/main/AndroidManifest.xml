@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.bcit.avoidit">
+
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -11,13 +19,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemeLight">
 
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAVshW8Xj3riiZMLISOJF6JY7zT6V0TKLk" />
+            android:value="@string/google_maps_key" />
 
-        <activity android:name=".NotificationsActivity"></activity>
+        <activity
+            android:name=".ViewMapsObstructionActivity"
+            android:label="@string/title_activity_view_maps_obstruction"></activity>
+        <activity android:name=".NotificationsActivity" />
         <activity android:name=".RouteDetailActivity" />
-        <activity android:name=".ViewObstructionsOldActivity" />
         <activity android:name=".AddRouteActivity" />
         <activity android:name=".ViewRoutesActivity" />
         <activity android:name=".MainActivity">

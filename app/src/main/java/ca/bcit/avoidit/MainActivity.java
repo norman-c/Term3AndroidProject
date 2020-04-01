@@ -19,8 +19,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity
 
     static SharedPreferences sharedPreferences;
     static SharedPreferences.Editor editor;
-
+    static ArrayList<ArrayList<LatLng>> coords;
     static boolean isDarkMode;
 
     @Override
@@ -96,7 +98,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,
-                        ViewObstructionsOldActivity.class);
+                        ViewMapsObstructionActivity.class);
                 startActivity(intent);
             }
         });
@@ -109,25 +111,40 @@ public class MainActivity extends AppCompatActivity
                         "comp_date");
 
         System.out.println("====== call url : " + call.request().url().toString());
-
-        call.enqueue(new Callback<Hazard> () {
+        coords = new ArrayList<>();
+        call.enqueue(new Callback<Hazard>() {
             @Override
             public void onResponse(Call<Hazard> call, Response<Hazard> response) {
                 records = response.body().getRecords();
-                for(int i = 0; i < records.size(); i++){
-                    System.out.println(i);
-                    System.out.println(records.get(i).getFields().getProject());
-//                    if(geom instanceof List<List<Double>> ){
-//                        //Cast to List<List<Double>> and do stuff
-//
-//                    } else{
-//                        //Cast to List<List<List<Double>>> and do stuff
-//
-//                    }
+                for (int i = 0; i < records.size(); i++) {
 
+                    List temp = records.get(i).getFields().getGeom().getCoordinates();
+                    if(records.get(i).getFields().getGeom().getType().equals("MultiLineString")){
+                        for (int j = 0; j < temp.size(); j++) {
+                            List c = (List) temp.get(j);
+                            ArrayList<LatLng> tempArray = new ArrayList<>();
+                            for (int k = 0; k < c.size(); k++) {
+                                double x = (double) ((List) c.get(k)).get(0);
+                                double y = (double) ((List) c.get(k)).get(1);
+                                tempArray.add(new LatLng(y, x));
+                            }
+                            coords.add(tempArray);
+                        }
+
+                    }else if(records.get(i).getFields().getGeom().getType().equals("LineString")){
+                        for (int j = 0; j < temp.size(); j++) {
+                            ArrayList<LatLng> tempArray = new ArrayList<>();
+                            List c = (List) temp.get(j);
+                            double x = (double) (c.get(0));
+                            double y = (double) (c.get(1));
+                            tempArray.add(new LatLng(y, x));
+                            coords.add(tempArray);
+                        }
+                    }else{
+                        System.out.println("GeometryCollection type not supported");
+                    }
                 }
             }
-
             @Override
             public void onFailure(Call<Hazard> call, Throwable t) {
                 Log.e("out", t.toString());
