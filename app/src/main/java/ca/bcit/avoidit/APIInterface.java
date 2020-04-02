@@ -2,6 +2,7 @@ package ca.bcit.avoidit;
 
 import java.util.List;
 
+import ca.bcit.avoidit.model.Geolocation;
 import ca.bcit.avoidit.model.Hazard;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -14,5 +15,12 @@ public interface APIInterface {
 
             @Query("dataset") String dataset,
             @Query("facet") String facet
+    );
+
+    @GET("/")
+    Call<Geolocation> getDirections(
+
+            @Query("outputFormat") String outputFormat,
+            @Query("parameters") String parameters
     );
 }

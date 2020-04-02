@@ -32,12 +32,14 @@
             android:value="@string/google_maps_key" />
 
         <activity
+            android:name=".ViewRoutesMapActivity"
+            android:label="@string/title_activity_view_routes_map"></activity>
+        <activity
             android:name=".ViewMapsObstructionActivity"
-            android:label="@string/title_activity_view_maps_obstruction"></activity>
+            android:label="@string/title_activity_view_maps_obstruction" />
         <activity android:name=".NotificationsActivity" />
         <activity android:name=".RouteDetailActivity" />
         <activity android:name=".AddRouteActivity" />
-        <activity android:name=".ViewRoutesActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

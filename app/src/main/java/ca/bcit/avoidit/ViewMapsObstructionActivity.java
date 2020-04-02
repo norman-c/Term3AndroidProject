@@ -49,15 +49,15 @@ public class ViewMapsObstructionActivity extends FragmentActivity implements OnM
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_maps_obstruction);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_view_maps_obstruction);
+            // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
 
 
-    }
+        }
 
     private void addMarker2Map(Location location) {
         String msg = String.format("Current Location: %4.3f Lat %4.3f Long.",
@@ -66,8 +66,7 @@ public class ViewMapsObstructionActivity extends FragmentActivity implements OnM
 
         LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.addMarker(new MarkerOptions().position(latlng).title(msg));
-        float zoomLevel = 12.0f;
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng,zoomLevel));
+
     }
 
     @Override
@@ -96,6 +95,7 @@ public class ViewMapsObstructionActivity extends FragmentActivity implements OnM
             locationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
+
                     addMarker2Map(location);
                 }
                 @Override
@@ -112,12 +112,13 @@ public class ViewMapsObstructionActivity extends FragmentActivity implements OnM
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
                 lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 addMarker2Map(lastKnownLocation);
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()),12.0f));
             } else {
                 ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
             }
 
         }
-        
+
         addPolyLines(coords);
         addPolyLines(coords2);
     }

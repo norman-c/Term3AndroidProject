@@ -42,4 +42,5 @@
 
     <string name="txt_error">Error!</string>
     <string name="title_activity_view_maps_obstruction">Map</string>
+    <string name="title_activity_view_routes_map">Map</string>
 </resources>

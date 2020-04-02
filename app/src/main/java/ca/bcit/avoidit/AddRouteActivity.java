@@ -1,7 +1,5 @@
 package ca.bcit.avoidit;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,14 +8,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import ca.bcit.avoidit.model.UserRoute;
 
@@ -49,6 +50,7 @@ public class AddRouteActivity extends AppCompatActivity {
             }
         });
     }
+
 
     /**
      * Adds a route to the Firebase Database.
