@@ -38,6 +38,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static ca.bcit.avoidit.MainActivity.coords;
+import static ca.bcit.avoidit.MainActivity.coords2;
 
 public class ViewMapsObstructionActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -116,11 +117,12 @@ public class ViewMapsObstructionActivity extends FragmentActivity implements OnM
             }
 
         }
+        
+        addPolyLines(coords);
+        addPolyLines(coords2);
+    }
 
-
-//        PolylineOptions rectOptions = new PolylineOptions().addAll(coords);
-//        mMap.addPolyline(rectOptions);
-
+    private void addPolyLines(ArrayList<ArrayList<LatLng>> coords){
         for(int i = 0; i<coords.size(); i++) {
             if(coords.get(i).size() == 2) {
                 mMap.addPolyline(new PolylineOptions()

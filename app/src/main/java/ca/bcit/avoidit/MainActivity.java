@@ -41,10 +41,12 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar;
 
     List<Record> records;
+    List<Record> records2;
 
     static SharedPreferences sharedPreferences;
     static SharedPreferences.Editor editor;
     static ArrayList<ArrayList<LatLng>> coords;
+    static ArrayList<ArrayList<LatLng>> coords2;
     static boolean isDarkMode;
 
     @Override
@@ -109,9 +111,13 @@ public class MainActivity extends AppCompatActivity
         Call<Hazard> call = apiInterface
                 .getHazardData("road-ahead-current-road-closures",
                         "comp_date");
+        Call<Hazard> call2 = apiInterface
+                .getHazardData("road-ahead-projects-under-construction",
+                        "comp_date");
 
         System.out.println("====== call url : " + call.request().url().toString());
         coords = new ArrayList<>();
+        coords2 = new ArrayList<>();
         call.enqueue(new Callback<Hazard>() {
             @Override
             public void onResponse(Call<Hazard> call, Response<Hazard> response) {
@@ -142,6 +148,43 @@ public class MainActivity extends AppCompatActivity
                         }
                     }else{
                         System.out.println("GeometryCollection type not supported");
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<Hazard> call, Throwable t) {
+                Log.e("out", t.toString());
+            }
+        });
+        System.out.println("====== call url : " + call2.request().url().toString());
+        call2.enqueue(new Callback<Hazard>() {
+            @Override
+            public void onResponse(Call<Hazard> call, Response<Hazard> response) {
+                records2 = response.body().getRecords();
+                for (int i = 0; i < records2.size(); i++) {
+
+                    List temp = records2.get(i).getFields().getGeom().getCoordinates();
+                    if(records2.get(i).getFields().getGeom().getType().equals("MultiLineString")){
+                        for (int j = 0; j < temp.size(); j++) {
+                            List c = (List) temp.get(j);
+                            ArrayList<LatLng> tempArray = new ArrayList<>();
+                            for (int k = 0; k < c.size(); k++) {
+                                double x = (double) ((List) c.get(k)).get(0);
+                                double y = (double) ((List) c.get(k)).get(1);
+                                tempArray.add(new LatLng(y, x));
+                            }
+                            coords2.add(tempArray);
+                        }
+
+                    }else if(records2.get(i).getFields().getGeom().getType().equals("LineString")){
+                        for (int j = 0; j < temp.size(); j++) {
+                            ArrayList<LatLng> tempArray = new ArrayList<>();
+                            List c = (List) temp.get(j);
+                            double x = (double) (c.get(0));
+                            double y = (double) (c.get(1));
+                            tempArray.add(new LatLng(y, x));
+                            coords2.add(tempArray);
+                        }
                     }
                 }
             }
