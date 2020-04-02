@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.AlarmManager;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -191,7 +190,23 @@ public class RouteDetailActivity extends AppCompatActivity implements TimePicker
             @Override
             public void onSuccess(Object o) {
                 Toast.makeText(RouteDetailActivity.this, "Route modified!", Toast.LENGTH_LONG).show();
-                //TODO: set / cancel alarm based on state of switch
+                cancelAlarm();
+                if (noteEnabled) {
+                    Calendar calendar = Calendar.getInstance();
+
+                    //Extract time from our time field.
+                    String time = (String) currentTime.getText();
+                    //almost there
+
+                    //Set alarms for today(?) + the next six days.
+                    calendar.set(Calendar.HOUR, 1);
+                    calendar.set(Calendar.MINUTE, 1);
+
+                    for (int i = 0; i < 7; i++) {
+                        setAlarm(calendar, calendar.get(Calendar.DAY_OF_WEEK));
+                        calendar.add(Calendar.DATE, 1);
+                    }
+                }
                 finish();
             }
         });
@@ -223,20 +238,30 @@ public class RouteDetailActivity extends AppCompatActivity implements TimePicker
         });
     }
 
-    public void setAlarm(Calendar c) {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+    /**
+     * Sets an alarm for the current day of the week.
+     */
+    public void setAlarm(Calendar c, int dayOfWeek) {
+        if (notificationDays.get(dayOfWeek-1)) {
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(this, AlertReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, dayOfWeek - 1, intent, 0);
 
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+
+        }
     }
 
+    /**
+     * Cancels all alarms, whether they're active or not.
+     */
     public void cancelAlarm() {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
-
-        alarmManager.cancel(pendingIntent);
+        for (int i = 0; i < 7; i++) {
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, i, intent, 0);
+            alarmManager.cancel(pendingIntent);
+        }
     }
 
     @Override
