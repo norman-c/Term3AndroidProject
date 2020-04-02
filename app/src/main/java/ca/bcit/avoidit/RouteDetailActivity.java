@@ -2,7 +2,13 @@ package ca.bcit.avoidit;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
+import android.app.AlarmManager;
+import android.app.Dialog;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,6 +17,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -20,11 +28,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import ca.bcit.avoidit.model.UserRoute;
-import okhttp3.Route;
 
-public class RouteDetailActivity extends AppCompatActivity {
+public class RouteDetailActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
 
     //The passed-in data/.
     String routeID;
@@ -39,7 +47,7 @@ public class RouteDetailActivity extends AppCompatActivity {
     EditText fieldRouteName;
     EditText fieldRoutePointA;
     EditText fieldRoutePointB;
-    EditText fieldTime;
+    TextView currentTime;
     Switch switchNotifications;
 
     //Other variables.
@@ -77,8 +85,8 @@ public class RouteDetailActivity extends AppCompatActivity {
         fieldRoutePointB = findViewById(R.id.plaintext_end_location);
         fieldRoutePointB.setText(routePointB);
 
-        fieldTime = findViewById((R.id.edittext_time));
-        fieldTime.setText(notificationTime);
+        currentTime = findViewById((R.id.textview_current));
+        currentTime.setText(notificationTime);
 
         switchNotifications = findViewById(R.id.switch_notifications);
         switchNotifications.setChecked(notificationEnabled);
@@ -119,7 +127,14 @@ public class RouteDetailActivity extends AppCompatActivity {
             });
         }
 
-        //assign functions to save and delete
+        //assign functions to set time, save, and delete
+        Button buttonTime = findViewById(R.id.button_edit_time);
+        buttonTime.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                editTime();
+            }
+        });
+
         Button saveRoute = findViewById(R.id.button_save_changes);
         saveRoute.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
@@ -136,11 +151,16 @@ public class RouteDetailActivity extends AppCompatActivity {
 
     }
 
+    public void editTime() {
+        DialogFragment timePicker = new TimePickerFragment();
+        timePicker.show(getSupportFragmentManager(), "Time Picker");
+    }
+
     public void editRoute() {
         String routeName = fieldRouteName.getText().toString().trim();
         String routePointA = fieldRoutePointA.getText().toString().trim();
         String routePointB = fieldRoutePointB.getText().toString().trim();
-        String noteTime = fieldTime.getText().toString().trim();
+        String noteTime = currentTime.getText().toString().trim();
         boolean noteEnabled = switchNotifications.isEnabled();
 
         if (TextUtils.isEmpty(routeName)) {
@@ -171,6 +191,7 @@ public class RouteDetailActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Object o) {
                 Toast.makeText(RouteDetailActivity.this, "Route modified!", Toast.LENGTH_LONG).show();
+                //TODO: set / cancel alarm based on state of switch
                 finish();
             }
         });
@@ -189,6 +210,8 @@ public class RouteDetailActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Object o) {
                 Toast.makeText(RouteDetailActivity.this, "Route deleted!", Toast.LENGTH_LONG).show();
+                cancelAlarm();
+                finish();
             }
         });
 
@@ -198,7 +221,29 @@ public class RouteDetailActivity extends AppCompatActivity {
                 Toast.makeText(RouteDetailActivity.this, "Something went wrong...", Toast.LENGTH_LONG).show();
             }
         });
+    }
 
-        finish();
+    public void setAlarm(Calendar c) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+    }
+
+    public void cancelAlarm() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+        alarmManager.cancel(pendingIntent);
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int hour, int min) {
+        TextView ct = currentTime;
+        String properHour = String.format("%02d", hour);
+        String properMinute = String.format("%02d", min);
+        ct.setText(properHour + ":" + properMinute);
     }
 }
