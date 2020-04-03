@@ -80,6 +80,7 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
         listViewRoutes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mMap.clear();
                 UserRoute routeUsed = routeList.get(position);
                 LatLng pointA = getLocationFromAddress(view.getContext(),routeUsed.getRoutePointA());
                 LatLng pointB = getLocationFromAddress(view.getContext(),routeUsed.getRoutePointB());
