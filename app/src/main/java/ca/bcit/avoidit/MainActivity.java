@@ -140,16 +140,17 @@ public class MainActivity extends AppCompatActivity
                     }else if(records.get(i).getFields().getGeom().getType().equals("LineString")){
                         for (int j = 0; j < temp.size(); j++) {
                             ArrayList<LatLng> tempArray = new ArrayList<>();
-                            List c = (List) temp.get(j);
-                            double x = (double) (c.get(0));
-                            double y = (double) (c.get(1));
-                            tempArray.add(new LatLng(y, x));
+                            for(int k = 0; k < temp.size(); k++){
+                                ArrayList arrayListTemp = (ArrayList)temp.get(k);
+                                double x = (double) arrayListTemp.get(0);
+                                double y = (double) arrayListTemp.get(1);
+                                tempArray.add(new LatLng(y, x));
+                            }
                             coords.add(tempArray);
                         }
-                    }else{
-                        System.out.println("GeometryCollection type not supported");
                     }
                 }
+
             }
             @Override
             public void onFailure(Call<Hazard> call, Throwable t) {
@@ -176,14 +177,16 @@ public class MainActivity extends AppCompatActivity
                             coords2.add(tempArray);
                         }
 
-                    }else if(records2.get(i).getFields().getGeom().getType().equals("LineString")){
+                    }else if(records.get(i).getFields().getGeom().getType().equals("LineString")){
                         for (int j = 0; j < temp.size(); j++) {
                             ArrayList<LatLng> tempArray = new ArrayList<>();
-                            List c = (List) temp.get(j);
-                            double x = (double) (c.get(0));
-                            double y = (double) (c.get(1));
-                            tempArray.add(new LatLng(y, x));
-                            coords2.add(tempArray);
+                            for(int k = 0; k < temp.size(); k++){
+                                ArrayList arrayListTemp = (ArrayList)temp.get(k);
+                                double x = (double) arrayListTemp.get(0);
+                                double y = (double) arrayListTemp.get(1);
+                                tempArray.add(new LatLng(y, x));
+                            }
+                            coords.add(tempArray);
                         }
                     }
                 }

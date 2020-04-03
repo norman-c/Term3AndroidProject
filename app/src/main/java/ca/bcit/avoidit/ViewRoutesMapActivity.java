@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.DirectionsApi;
@@ -46,7 +47,11 @@ import com.google.maps.model.EncodedPolyline;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.bcit.avoidit.model.MyPoint;
 import ca.bcit.avoidit.model.UserRoute;
+
+import static ca.bcit.avoidit.MainActivity.coords;
+import static ca.bcit.avoidit.MainActivity.coords2;
 
 public class ViewRoutesMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -89,6 +94,10 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom((pointA),12.0f));
 
                 drawRoute(pointA,pointB);
+                MyPoint aFirst = new MyPoint(pointA.latitude,pointA.longitude);
+                MyPoint bFirst = new MyPoint(pointB.latitude,pointB.longitude);
+
+                checkIntersects(coords2,aFirst,bFirst);
 
             }
             });
@@ -136,7 +145,7 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
 
     }
 
-    public LatLng getLocationFromAddress(Context context, String strAddress)
+    private LatLng getLocationFromAddress(Context context, String strAddress)
     {
         Geocoder coder= new Geocoder(context);
         List<Address> address;
@@ -160,6 +169,30 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
             e.printStackTrace();
         }
         return p1;
+    }
+
+    private String getLocationFromLatlng(Context context, double lat, double lng)
+    {
+        Geocoder coder= new Geocoder(context);
+        List<Address> address;
+        Address location = null;
+        LatLng p1 = null;
+        try
+        {
+            address = coder.getFromLocation(lat, lng,1);
+            if(address==null)
+            {
+                return null;
+            }
+            location = address.get(0);
+        }
+        catch (Exception e)
+        {
+            //Invalid address
+            e.printStackTrace();
+        }
+        System.out.println(location.toString());
+        return location.getThoroughfare();
     }
 
     @Override
@@ -257,6 +290,75 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
         if (path.size() > 0) {
             PolylineOptions opts = new PolylineOptions().addAll(path).color(Color.BLUE).width(5);
             mMap.addPolyline(opts);
+        }
+    }
+
+    boolean doLineSegmentsIntersect(MyPoint p, MyPoint p2, MyPoint q, MyPoint q2) {
+        MyPoint r = subtractPoints(p2, p);
+        MyPoint s = subtractPoints(q2, q);
+
+        float uNumerator = crossProduct(subtractPoints(q, p), r);
+        float denominator = crossProduct(r, s);
+
+        if (denominator == 0) {
+            // lines are paralell
+            return false;
+        }
+
+        float u = uNumerator / denominator;
+        float t = crossProduct(subtractPoints(q, p), s) / denominator;
+
+        return (t >= 0) && (t <= 1) && (u > 0) && (u <= 1);
+    }
+
+    /**
+     * Calculate the cross product of the two points.
+     *
+     * @param {Object} point1 point object with x and y coordinates
+     * @param {Object} point2 point object with x and y coordinates
+     *
+     * @return the cross product result as a float
+     */
+    float crossProduct(MyPoint point1, MyPoint point2) {
+        return (float) (point1.x * point2.y - point1.y * point2.x);
+    }
+
+    /**
+     * Subtract the second point from the first.
+     *
+     * @param {Object} point1 point object with x and y coordinates
+     * @param {Object} point2 point object with x and y coordinates
+     *
+     * @return the subtraction result as a point object
+     */
+    MyPoint subtractPoints(MyPoint point1,MyPoint point2) {
+        MyPoint result = new MyPoint();
+        result.x = point1.x - point2.x;
+        result.y = point1.y - point2.y;
+
+        return result;
+    }
+
+    private void checkIntersects(ArrayList<ArrayList<LatLng>> coords, MyPoint aFirst, MyPoint bFirst) {
+        for (int i = 0; i < coords.size(); i++) {
+            if(coords.get(i).size() == 2) {
+                MyPoint aSecond = new MyPoint(coords.get(i).get(0).latitude,coords.get(i).get(0).longitude);
+                MyPoint bSecond = new MyPoint(coords.get(i).get(1).latitude,coords.get(i).get(1).longitude);
+                if(doLineSegmentsIntersect(aFirst,bFirst,aSecond,bSecond)){
+                    String temp = getLocationFromLatlng(listViewRoutes.getContext(),coords.get(i).get(0).latitude,coords.get(i).get(0).longitude);
+                    if(temp == null){
+                        Toast.makeText(this, "Route intersects with obstruction", Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(this, "Route intersects with obstruction at "+ temp, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+            if(coords.get(i).size() == 3) {
+
+            }
+            if(coords.get(i).size() == 4) {
+
+            }
         }
     }
 }
