@@ -50,6 +50,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.maps.DirectionsApi;
+import com.google.maps.DirectionsApiRequest;
+import com.google.maps.GeoApiContext;
+import com.google.maps.model.DirectionsLeg;
+import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.DirectionsRoute;
+import com.google.maps.model.DirectionsStep;
+import com.google.maps.model.EncodedPolyline;
 
 import org.json.JSONObject;
 
@@ -73,6 +81,8 @@ public class AddRouteActivity extends AppCompatActivity
     EditText editPointA;
     EditText editPointB;
     Button addRouteButton;
+
+    Button btnViewRoute;
 
     DatabaseReference database;
 
@@ -108,20 +118,22 @@ public class AddRouteActivity extends AppCompatActivity
         editPointB = findViewById(R.id.edt_end_location);
         addRouteButton = findViewById(R.id.btn_add_route);
 
-        Button button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+        btnViewRoute = findViewById(R.id.btn_view_route);
+        btnViewRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    PlacePicker.IntentBuilder intentBuilder =
-                            new PlacePicker.IntentBuilder();
-                    intentBuilder.setLatLngBounds(BOUNDS_MOUNTAIN_VIEW);
-                    Intent intent = intentBuilder.build(AddRouteActivity.this);
-                    startActivityForResult(intent, PLACE_PICKER_REQUEST);
-                } catch (GooglePlayServicesRepairableException
-                        | GooglePlayServicesNotAvailableException e) {
-                    e.printStackTrace();
-                }
+                String routePointA = editPointA.getText().toString().trim();
+                String routePointB = editPointB.getText().toString().trim();
+
+                LatLng pointA = getLocationFromAddress(editPointA.getContext(), routePointA);
+                LatLng pointB = getLocationFromAddress(editPointA.getContext(), routePointB);
+
+                mMap.addMarker(new MarkerOptions().position(pointA));
+                mMap.addMarker(new MarkerOptions().position(pointB));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom((pointA),12.0f));
+
+                drawRoute(pointA, pointB);
+
             }
         });
 
@@ -131,28 +143,6 @@ public class AddRouteActivity extends AppCompatActivity
                 addRoute();
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == PLACE_PICKER_REQUEST
-                && resultCode == Activity.RESULT_OK) {
-
-            final Place place = PlacePicker.getPlace(this, data);
-            final CharSequence name = place.getName();
-            final CharSequence address = place.getAddress();
-            String attributions = (String) place.getAttributions();
-            if (attributions == null) {
-                attributions = "";
-            }
-
-//            editPointA.setText(name);
-//            mAddress.setText(address);
-//            mAttributions.setText(Html.fromHtml(attributions));
-
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
     }
 
     /**
@@ -250,61 +240,101 @@ public class AddRouteActivity extends AppCompatActivity
             }
 
         }
-
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng point) {
-                // Already two locations
-                if(mMarkerPoints.size()>1){
-                    mMarkerPoints.clear();
-                    mMap.clear();
-                }
-
-                // Adding new item to the ArrayList
-                mMarkerPoints.add(point);
-
-                // Creating MarkerOptions
-                MarkerOptions options = new MarkerOptions();
-
-                // Setting the position of the marker
-                options.position(point);
-
-                /**
-                 * For the start location, the color of marker is GREEN and
-                 * for the end location, the color of marker is RED.
-                 */
-                if(mMarkerPoints.size()==1){
-                    options.icon(BitmapDescriptorFactory
-                            .defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                }else if(mMarkerPoints.size()==2){
-                    options.icon(BitmapDescriptorFactory
-                            .defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                }
-
-                // Add new marker to the Google Map Android API V2
-                mMap.addMarker(options);
-
-                // Checks, whether start and end locations are captured
-                if(mMarkerPoints.size() >= 2){
-                    mOrigin = mMarkerPoints.get(0);
-                    mDestination = mMarkerPoints.get(1);
-                    System.out.println("mOrigin >>>>>" + mOrigin);
-                    System.out.println("mDestination >>>>>" + mDestination);
-                    drawRoute();
-                }
-            }
-        });
+        
     }
 
-    private void drawRoute(){
+    private void drawRoute(LatLng a, LatLng b){
 
-        // Getting URL to the Google Directions API
-        String url = getDirectionsUrl(mOrigin, mDestination);
+        List<LatLng> path = new ArrayList();
+        GeoApiContext context = new GeoApiContext.Builder()
+                .apiKey("AIzaSyD3lGC8RKD4XWuKRcEDlnw1es060HF8yhM")
+                .build();
+        DirectionsApiRequest req = DirectionsApi.getDirections(context,
+                a.latitude+","+a.longitude, b.latitude+","
+                        +b.longitude);
 
-        DownloadTask downloadTask = new DownloadTask();
+        try {
+            DirectionsResult res = req.await();
+            //Loop through legs and steps to get encoded polylines of each step
+            if (res.routes != null && res.routes.length > 0) {
+                DirectionsRoute route = res.routes[0];
 
-        // Start downloading json data from Google Directions API
-        downloadTask.execute(url);
+                if (route.legs !=null) {
+                    for(int i=0; i<route.legs.length; i++) {
+                        DirectionsLeg leg = route.legs[i];
+                        if (leg.steps != null) {
+                            for (int j=0; j<leg.steps.length;j++){
+                                DirectionsStep step = leg.steps[j];
+                                if (step.steps != null && step.steps.length >0) {
+                                    for (int k=0; k<step.steps.length;k++){
+                                        DirectionsStep step1 = step.steps[k];
+                                        EncodedPolyline points1 = step1.polyline;
+                                        if (points1 != null) {
+                                            //Decode polyline and add points to list of route coordinates
+                                            List<com.google.maps.model.LatLng> coords1 = points1.decodePath();
+                                            for (com.google.maps.model.LatLng coord1 : coords1) {
+                                                path.add(new LatLng(coord1.lat, coord1.lng));
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    EncodedPolyline points = step.polyline;
+                                    if (points != null) {
+                                        //Decode polyline and add points to list of route coordinates
+                                        List<com.google.maps.model.LatLng> coords = points.decodePath();
+                                        for (com.google.maps.model.LatLng coord : coords) {
+                                            path.add(new LatLng(coord.lat, coord.lng));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch(Exception ex) {
+            System.out.println(ex);
+        }
+
+        //Draw the polyline
+        if (path.size() > 0) {
+            PolylineOptions opts = new PolylineOptions().addAll(path).color(Color.BLUE).width(5);
+            mMap.addPolyline(opts);
+        }
+
+//        // Getting URL to the Google Directions API
+//        String url = getDirectionsUrl(a, b);
+//
+//        DownloadTask downloadTask = new DownloadTask();
+//
+//        // Start downloading json data from Google Directions API
+//        downloadTask.execute(url);
+    }
+
+    private LatLng getLocationFromAddress(Context context, String strAddress)
+    {
+        Geocoder coder= new Geocoder(context);
+        List<Address> address;
+        LatLng p1 = null;
+        try
+        {
+            address = coder.getFromLocationName(strAddress, 5);
+            if(address==null)
+            {
+                return null;
+            }
+            Address location = address.get(0);
+            location.getLatitude();
+            location.getLongitude();
+
+            p1 = new LatLng(location.getLatitude(), location.getLongitude());
+        }
+        catch (Exception e)
+        {
+            //Invalid address
+            e.printStackTrace();
+        }
+        return p1;
     }
 
 
