@@ -9,13 +9,22 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.DirectionsApi;
+import com.google.maps.DirectionsApiRequest;
+import com.google.maps.GeoApiContext;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,15 +37,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.maps.model.DirectionsLeg;
+import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.DirectionsRoute;
+import com.google.maps.model.DirectionsStep;
+import com.google.maps.model.EncodedPolyline;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.bcit.avoidit.model.Geolocation;
 import ca.bcit.avoidit.model.UserRoute;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ViewRoutesMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -59,8 +69,7 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
 
         database = FirebaseDatabase.getInstance().getReference("routes");
 
-        APIInterface apiInterface = RetrofitClientInstance.getDirectionsClient()
-                .create(APIInterface.class);
+
 
 
 
@@ -72,23 +81,14 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 UserRoute routeUsed = routeList.get(position);
-                String address = "address=" + routeUsed.getRoutePointA().replaceAll(" ","+") + "&key=AIzaSyBonFeYm8XzCDPYLDdn5wvI4WhwUgJZVy0";
-                Call<Geolocation> call = apiInterface
-                        .getDirections("json",
-                                address);
-                System.out.println(address);
-                call.enqueue(new Callback<Geolocation>() {
-                    @Override
-                    public void onResponse(Call<Geolocation> call, Response<Geolocation> response) {
-                        System.out.println(response);
+                LatLng pointA = getLocationFromAddress(view.getContext(),routeUsed.getRoutePointA());
+                LatLng pointB = getLocationFromAddress(view.getContext(),routeUsed.getRoutePointB());
+                mMap.addMarker(new MarkerOptions().position(pointA).title(routeUsed.getRoutePointA()));
+                mMap.addMarker(new MarkerOptions().position(pointB).title(routeUsed.getRoutePointA()));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom((pointA),12.0f));
 
-                    }
+                drawRoute(pointA,pointB);
 
-                    @Override
-                    public void onFailure(Call<Geolocation> call, Throwable t) {
-                        System.out.println("Penis");
-                    }
-                });
             }
             });
 
@@ -130,14 +130,37 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
     }
 
     private void addMarker2Map(Location location) {
-        String msg = String.format("Current Location: %4.3f Lat %4.3f Long.",
-                location.getLatitude(),
-                location.getLongitude());
-
         LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(latlng).title(msg));
+        mMap.addMarker(new MarkerOptions().position(latlng));
 
     }
+
+    public LatLng getLocationFromAddress(Context context, String strAddress)
+    {
+        Geocoder coder= new Geocoder(context);
+        List<Address> address;
+        LatLng p1 = null;
+        try
+        {
+            address = coder.getFromLocationName(strAddress, 5);
+            if(address==null)
+            {
+                return null;
+            }
+            Address location = address.get(0);
+            location.getLatitude();
+            location.getLongitude();
+
+            p1 = new LatLng(location.getLatitude(), location.getLongitude());
+        }
+        catch (Exception e)
+        {
+            //Invalid address
+            e.printStackTrace();
+        }
+        return p1;
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -177,6 +200,63 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
 
         }
 
+    }
+
+    private void drawRoute(LatLng a, LatLng b){
+
+        List<LatLng> path = new ArrayList();
+        GeoApiContext context = new GeoApiContext.Builder()
+                .apiKey("AIzaSyD3lGC8RKD4XWuKRcEDlnw1es060HF8yhM")
+                .build();
+        DirectionsApiRequest req = DirectionsApi.getDirections(context, a.latitude+","+a.longitude, b.latitude+","+b.longitude);
+        try {
+            DirectionsResult res = req.await();
+            //Loop through legs and steps to get encoded polylines of each step
+            if (res.routes != null && res.routes.length > 0) {
+                DirectionsRoute route = res.routes[0];
+
+                if (route.legs !=null) {
+                    for(int i=0; i<route.legs.length; i++) {
+                        DirectionsLeg leg = route.legs[i];
+                        if (leg.steps != null) {
+                            for (int j=0; j<leg.steps.length;j++){
+                                DirectionsStep step = leg.steps[j];
+                                if (step.steps != null && step.steps.length >0) {
+                                    for (int k=0; k<step.steps.length;k++){
+                                        DirectionsStep step1 = step.steps[k];
+                                        EncodedPolyline points1 = step1.polyline;
+                                        if (points1 != null) {
+                                            //Decode polyline and add points to list of route coordinates
+                                            List<com.google.maps.model.LatLng> coords1 = points1.decodePath();
+                                            for (com.google.maps.model.LatLng coord1 : coords1) {
+                                                path.add(new LatLng(coord1.lat, coord1.lng));
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    EncodedPolyline points = step.polyline;
+                                    if (points != null) {
+                                        //Decode polyline and add points to list of route coordinates
+                                        List<com.google.maps.model.LatLng> coords = points.decodePath();
+                                        for (com.google.maps.model.LatLng coord : coords) {
+                                            path.add(new LatLng(coord.lat, coord.lng));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch(Exception ex) {
+            System.out.println(ex);
+        }
+
+        //Draw the polyline
+        if (path.size() > 0) {
+            PolylineOptions opts = new PolylineOptions().addAll(path).color(Color.BLUE).width(5);
+            mMap.addPolyline(opts);
+        }
     }
 }
 

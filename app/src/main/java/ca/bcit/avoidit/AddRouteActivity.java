@@ -6,12 +6,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -157,6 +161,7 @@ public class AddRouteActivity extends FragmentActivity implements OnMapReadyCall
 
     }
 
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -260,7 +265,7 @@ public class AddRouteActivity extends FragmentActivity implements OnMapReadyCall
         String str_dest = "destination="+dest.latitude+","+dest.longitude;
 
         // Key
-        String key = "key=" + getString(R.string.google_maps_key);
+        String key = "key=AIzaSyD3lGC8RKD4XWuKRcEDlnw1es060HF8yhM" ;
 
         // Building the parameters to the web service
         String parameters = str_origin+"&"+str_dest+"&"+key;
