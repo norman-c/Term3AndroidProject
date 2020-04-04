@@ -30,12 +30,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import ca.bcit.avoidit.model.Coordinate;
-import ca.bcit.avoidit.model.Hazard;
+
 import ca.bcit.avoidit.model.Record;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 
 import static ca.bcit.avoidit.MainActivity.coords;
 import static ca.bcit.avoidit.MainActivity.coords2;
@@ -125,7 +122,6 @@ public class ViewMapsObstructionActivity extends FragmentActivity implements OnM
 
     private void addPolyLines(ArrayList<ArrayList<LatLng>> coords){
         for(int i = 0; i<coords.size(); i++) {
-            System.out.println(coords.get(i).size());
             if(coords.get(i).size() == 2) {
                 mMap.addPolyline(new PolylineOptions()
                         .clickable(true)

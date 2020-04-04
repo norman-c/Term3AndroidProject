@@ -1,5 +1,6 @@
 package ca.bcit.avoidit;
 
+import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -56,11 +57,12 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
 
+import ca.bcit.avoidit.model.MyPoint;
 import ca.bcit.avoidit.model.UserRoute;
 
 public class RouteDetailActivity extends AppCompatActivity
         implements TimePickerDialog.OnTimeSetListener,
-                    OnMapReadyCallback {
+        OnMapReadyCallback {
 
     //The passed-in data/.
     String routeID;
@@ -81,6 +83,8 @@ public class RouteDetailActivity extends AppCompatActivity
     //Other variables.
     DatabaseReference database;
     ArrayList<Button> buttonList;
+
+    static ArrayList<MyPoint> list = new ArrayList<>();
 
     private GoogleMap mMap;
     private LocationManager locationManager;
@@ -245,7 +249,7 @@ public class RouteDetailActivity extends AppCompatActivity
                     calendar.set(Calendar.SECOND, 0);
 
                     for (int i = 0; i < 7; i++) {
-                        setAlarm(calendar, calendar.get(Calendar.DAY_OF_WEEK));
+                        setAlarm(calendar, calendar.get(Calendar.DAY_OF_WEEK),routePointA,routePointB);
                         calendar.add(Calendar.DATE, 1);
                     }
                     scanner.close();
@@ -284,10 +288,17 @@ public class RouteDetailActivity extends AppCompatActivity
     /**
      * Sets an alarm for the current day of the week.
      */
-    public void setAlarm(Calendar c, int dayOfWeek) {
+    public void setAlarm(Calendar c, int dayOfWeek,String a, String b) {
         if (notificationDays.get(dayOfWeek-1)) {
+            LatLng pointA = ViewRoutesMapActivity.getLocationFromAddress(this,a);
+            LatLng pointB = ViewRoutesMapActivity.getLocationFromAddress(this,b);
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(this, AlertReceiver.class);
+            MyPoint aFirst = new MyPoint(pointA.latitude,pointA.longitude);
+            MyPoint bFirst = new MyPoint(pointB.latitude,pointB.longitude);
+            list.clear();
+            list.add(aFirst);
+            list.add(bFirst);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this, dayOfWeek - 1, intent, 0);
 
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);

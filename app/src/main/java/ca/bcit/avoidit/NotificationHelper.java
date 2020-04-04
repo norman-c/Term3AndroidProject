@@ -10,6 +10,8 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
+import static ca.bcit.avoidit.MainActivity.coords;
+
 
 public class NotificationHelper extends ContextWrapper {
     public static final String channelID = "channelID";
@@ -42,7 +44,7 @@ public class NotificationHelper extends ContextWrapper {
     public NotificationCompat.Builder getChannelNotification() {
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
                 .setContentTitle("AvoidIt")
-                .setContentText("One of your alarms has gone off!")
+                .setContentText("Obstruction on route found!")
                 .setSmallIcon(R.drawable.fake_map);
     }
 }

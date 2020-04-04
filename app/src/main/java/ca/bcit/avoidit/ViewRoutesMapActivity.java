@@ -97,6 +97,7 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
                 MyPoint aFirst = new MyPoint(pointA.latitude,pointA.longitude);
                 MyPoint bFirst = new MyPoint(pointB.latitude,pointB.longitude);
 
+                checkIntersects(coords,aFirst,bFirst);
                 checkIntersects(coords2,aFirst,bFirst);
 
             }
@@ -145,14 +146,14 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
 
     }
 
-    private LatLng getLocationFromAddress(Context context, String strAddress)
+    public static LatLng getLocationFromAddress(Context context, String strAddress)
     {
         Geocoder coder= new Geocoder(context);
         List<Address> address;
         LatLng p1 = null;
         try
         {
-            address = coder.getFromLocationName(strAddress, 5);
+            address = coder.getFromLocationName(strAddress, 1);
             if(address==null)
             {
                 return null;
@@ -191,7 +192,6 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
             //Invalid address
             e.printStackTrace();
         }
-        System.out.println(location.toString());
         return location.getThoroughfare();
     }
 
@@ -293,7 +293,7 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
         }
     }
 
-    boolean doLineSegmentsIntersect(MyPoint p, MyPoint p2, MyPoint q, MyPoint q2) {
+    public static boolean doLineSegmentsIntersect(MyPoint p, MyPoint p2, MyPoint q, MyPoint q2) {
         MyPoint r = subtractPoints(p2, p);
         MyPoint s = subtractPoints(q2, q);
 
@@ -319,7 +319,7 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
      *
      * @return the cross product result as a float
      */
-    float crossProduct(MyPoint point1, MyPoint point2) {
+    public static float crossProduct(MyPoint point1, MyPoint point2) {
         return (float) (point1.x * point2.y - point1.y * point2.x);
     }
 
@@ -331,7 +331,7 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
      *
      * @return the subtraction result as a point object
      */
-    MyPoint subtractPoints(MyPoint point1,MyPoint point2) {
+    public static MyPoint subtractPoints(MyPoint point1,MyPoint point2) {
         MyPoint result = new MyPoint();
         result.x = point1.x - point2.x;
         result.y = point1.y - point2.y;
@@ -339,27 +339,25 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
         return result;
     }
 
-    private void checkIntersects(ArrayList<ArrayList<LatLng>> coords, MyPoint aFirst, MyPoint bFirst) {
+    public static boolean checkIntersects(ArrayList<ArrayList<LatLng>> coords, MyPoint aFirst, MyPoint bFirst) {
         for (int i = 0; i < coords.size(); i++) {
             if(coords.get(i).size() == 2) {
                 MyPoint aSecond = new MyPoint(coords.get(i).get(0).latitude,coords.get(i).get(0).longitude);
                 MyPoint bSecond = new MyPoint(coords.get(i).get(1).latitude,coords.get(i).get(1).longitude);
                 if(doLineSegmentsIntersect(aFirst,bFirst,aSecond,bSecond)){
-                    String temp = getLocationFromLatlng(listViewRoutes.getContext(),coords.get(i).get(0).latitude,coords.get(i).get(0).longitude);
-                    if(temp == null){
-                        Toast.makeText(this, "Route intersects with obstruction", Toast.LENGTH_LONG).show();
-                    }else{
-                        Toast.makeText(this, "Route intersects with obstruction at "+ temp, Toast.LENGTH_LONG).show();
-                    }
+//                    String temp = getLocationFromLatlng(listViewRoutes.getContext(),coords.get(i).get(0).latitude,coords.get(i).get(0).longitude);
+//                    if(temp == null){
+//                        Toast.makeText(this, "Route intersects with obstruction", Toast.LENGTH_LONG).show();
+//                    }else{
+//                        Toast.makeText(this, "Route intersects with obstruction at "+ temp, Toast.LENGTH_LONG).show();
+//                    }
+                    return true;
                 }
             }
-            if(coords.get(i).size() == 3) {
-
-            }
-            if(coords.get(i).size() == 4) {
-
-            }
         }
+        return false;
     }
 }
+
+
 
