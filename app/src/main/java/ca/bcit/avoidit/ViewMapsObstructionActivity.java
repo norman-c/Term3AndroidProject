@@ -125,6 +125,7 @@ public class ViewMapsObstructionActivity extends FragmentActivity implements OnM
 
     private void addPolyLines(ArrayList<ArrayList<LatLng>> coords){
         for(int i = 0; i<coords.size(); i++) {
+            System.out.println(coords.get(i).size());
             if(coords.get(i).size() == 2) {
                 mMap.addPolyline(new PolylineOptions()
                         .clickable(true)
@@ -133,8 +134,7 @@ public class ViewMapsObstructionActivity extends FragmentActivity implements OnM
                         )
                         .width(10f)
                         .color(Color.RED));
-            }
-            if(coords.get(i).size() == 3) {
+            }else if(coords.get(i).size() == 3) {
                 mMap.addPolyline(new PolylineOptions()
                         .clickable(true)
                         .add(
@@ -142,8 +142,7 @@ public class ViewMapsObstructionActivity extends FragmentActivity implements OnM
                         )
                         .width(10f)
                         .color(Color.RED));
-            }
-            if(coords.get(i).size() == 4) {
+            }else if(coords.get(i).size() == 4) {
                 mMap.addPolyline(new PolylineOptions()
                         .clickable(true)
                         .add(
@@ -151,7 +150,17 @@ public class ViewMapsObstructionActivity extends FragmentActivity implements OnM
                         )
                         .width(10f)
                         .color(Color.RED));
+            }else if(coords.get(i).size() == 5) {
+                mMap.addPolyline(new PolylineOptions()
+                        .clickable(true)
+                        .add(
+                                coords.get(i).get(0), coords.get(i).get(1),  coords.get(i).get(2),  coords.get(i).get(3),coords.get(i).get(4)
+                        )
+                        .width(10f)
+                        .color(Color.RED));
             }
+
+
         }
     }
 }

@@ -9,13 +9,23 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.DirectionsApi;
+import com.google.maps.DirectionsApiRequest;
+import com.google.maps.GeoApiContext;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,15 +38,20 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.maps.model.DirectionsLeg;
+import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.DirectionsRoute;
+import com.google.maps.model.DirectionsStep;
+import com.google.maps.model.EncodedPolyline;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.bcit.avoidit.model.Geolocation;
+import ca.bcit.avoidit.model.MyPoint;
 import ca.bcit.avoidit.model.UserRoute;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
+import static ca.bcit.avoidit.MainActivity.coords;
+import static ca.bcit.avoidit.MainActivity.coords2;
 
 public class ViewRoutesMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -59,8 +74,7 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
 
         database = FirebaseDatabase.getInstance().getReference("routes");
 
-        APIInterface apiInterface = RetrofitClientInstance.getDirectionsClient()
-                .create(APIInterface.class);
+
 
 
 
@@ -71,24 +85,20 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
         listViewRoutes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mMap.clear();
                 UserRoute routeUsed = routeList.get(position);
-                String address = "address=" + routeUsed.getRoutePointA().replaceAll(" ","+") + "&key=AIzaSyBonFeYm8XzCDPYLDdn5wvI4WhwUgJZVy0";
-                Call<Geolocation> call = apiInterface
-                        .getDirections("json",
-                                address);
-                System.out.println(address);
-                call.enqueue(new Callback<Geolocation>() {
-                    @Override
-                    public void onResponse(Call<Geolocation> call, Response<Geolocation> response) {
-                        System.out.println(response);
+                LatLng pointA = getLocationFromAddress(view.getContext(),routeUsed.getRoutePointA());
+                LatLng pointB = getLocationFromAddress(view.getContext(),routeUsed.getRoutePointB());
+                mMap.addMarker(new MarkerOptions().position(pointA).title(routeUsed.getRoutePointA()));
+                mMap.addMarker(new MarkerOptions().position(pointB).title(routeUsed.getRoutePointA()));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom((pointA),12.0f));
 
-                    }
+                drawRoute(pointA,pointB);
+                MyPoint aFirst = new MyPoint(pointA.latitude,pointA.longitude);
+                MyPoint bFirst = new MyPoint(pointB.latitude,pointB.longitude);
 
-                    @Override
-                    public void onFailure(Call<Geolocation> call, Throwable t) {
-                        System.out.println("Penis");
-                    }
-                });
+                checkIntersects(coords2,aFirst,bFirst);
+
             }
             });
 
@@ -130,14 +140,61 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
     }
 
     private void addMarker2Map(Location location) {
-        String msg = String.format("Current Location: %4.3f Lat %4.3f Long.",
-                location.getLatitude(),
-                location.getLongitude());
-
         LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(latlng).title(msg));
+        mMap.addMarker(new MarkerOptions().position(latlng));
 
     }
+
+    private LatLng getLocationFromAddress(Context context, String strAddress)
+    {
+        Geocoder coder= new Geocoder(context);
+        List<Address> address;
+        LatLng p1 = null;
+        try
+        {
+            address = coder.getFromLocationName(strAddress, 5);
+            if(address==null)
+            {
+                return null;
+            }
+            Address location = address.get(0);
+            location.getLatitude();
+            location.getLongitude();
+
+            p1 = new LatLng(location.getLatitude(), location.getLongitude());
+        }
+        catch (Exception e)
+        {
+            //Invalid address
+            e.printStackTrace();
+        }
+        return p1;
+    }
+
+    private String getLocationFromLatlng(Context context, double lat, double lng)
+    {
+        Geocoder coder= new Geocoder(context);
+        List<Address> address;
+        Address location = null;
+        LatLng p1 = null;
+        try
+        {
+            address = coder.getFromLocation(lat, lng,1);
+            if(address==null)
+            {
+                return null;
+            }
+            location = address.get(0);
+        }
+        catch (Exception e)
+        {
+            //Invalid address
+            e.printStackTrace();
+        }
+        System.out.println(location.toString());
+        return location.getThoroughfare();
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -177,6 +234,132 @@ public class ViewRoutesMapActivity extends FragmentActivity implements OnMapRead
 
         }
 
+    }
+
+    private void drawRoute(LatLng a, LatLng b){
+
+        List<LatLng> path = new ArrayList();
+        GeoApiContext context = new GeoApiContext.Builder()
+                .apiKey("AIzaSyD3lGC8RKD4XWuKRcEDlnw1es060HF8yhM")
+                .build();
+        DirectionsApiRequest req = DirectionsApi.getDirections(context, a.latitude+","+a.longitude, b.latitude+","+b.longitude);
+        try {
+            DirectionsResult res = req.await();
+            //Loop through legs and steps to get encoded polylines of each step
+            if (res.routes != null && res.routes.length > 0) {
+                DirectionsRoute route = res.routes[0];
+
+                if (route.legs !=null) {
+                    for(int i=0; i<route.legs.length; i++) {
+                        DirectionsLeg leg = route.legs[i];
+                        if (leg.steps != null) {
+                            for (int j=0; j<leg.steps.length;j++){
+                                DirectionsStep step = leg.steps[j];
+                                if (step.steps != null && step.steps.length >0) {
+                                    for (int k=0; k<step.steps.length;k++){
+                                        DirectionsStep step1 = step.steps[k];
+                                        EncodedPolyline points1 = step1.polyline;
+                                        if (points1 != null) {
+                                            //Decode polyline and add points to list of route coordinates
+                                            List<com.google.maps.model.LatLng> coords1 = points1.decodePath();
+                                            for (com.google.maps.model.LatLng coord1 : coords1) {
+                                                path.add(new LatLng(coord1.lat, coord1.lng));
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    EncodedPolyline points = step.polyline;
+                                    if (points != null) {
+                                        //Decode polyline and add points to list of route coordinates
+                                        List<com.google.maps.model.LatLng> coords = points.decodePath();
+                                        for (com.google.maps.model.LatLng coord : coords) {
+                                            path.add(new LatLng(coord.lat, coord.lng));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch(Exception ex) {
+            System.out.println(ex);
+        }
+
+        //Draw the polyline
+        if (path.size() > 0) {
+            PolylineOptions opts = new PolylineOptions().addAll(path).color(Color.BLUE).width(5);
+            mMap.addPolyline(opts);
+        }
+    }
+
+    boolean doLineSegmentsIntersect(MyPoint p, MyPoint p2, MyPoint q, MyPoint q2) {
+        MyPoint r = subtractPoints(p2, p);
+        MyPoint s = subtractPoints(q2, q);
+
+        float uNumerator = crossProduct(subtractPoints(q, p), r);
+        float denominator = crossProduct(r, s);
+
+        if (denominator == 0) {
+            // lines are paralell
+            return false;
+        }
+
+        float u = uNumerator / denominator;
+        float t = crossProduct(subtractPoints(q, p), s) / denominator;
+
+        return (t >= 0) && (t <= 1) && (u > 0) && (u <= 1);
+    }
+
+    /**
+     * Calculate the cross product of the two points.
+     *
+     * @param {Object} point1 point object with x and y coordinates
+     * @param {Object} point2 point object with x and y coordinates
+     *
+     * @return the cross product result as a float
+     */
+    float crossProduct(MyPoint point1, MyPoint point2) {
+        return (float) (point1.x * point2.y - point1.y * point2.x);
+    }
+
+    /**
+     * Subtract the second point from the first.
+     *
+     * @param {Object} point1 point object with x and y coordinates
+     * @param {Object} point2 point object with x and y coordinates
+     *
+     * @return the subtraction result as a point object
+     */
+    MyPoint subtractPoints(MyPoint point1,MyPoint point2) {
+        MyPoint result = new MyPoint();
+        result.x = point1.x - point2.x;
+        result.y = point1.y - point2.y;
+
+        return result;
+    }
+
+    private void checkIntersects(ArrayList<ArrayList<LatLng>> coords, MyPoint aFirst, MyPoint bFirst) {
+        for (int i = 0; i < coords.size(); i++) {
+            if(coords.get(i).size() == 2) {
+                MyPoint aSecond = new MyPoint(coords.get(i).get(0).latitude,coords.get(i).get(0).longitude);
+                MyPoint bSecond = new MyPoint(coords.get(i).get(1).latitude,coords.get(i).get(1).longitude);
+                if(doLineSegmentsIntersect(aFirst,bFirst,aSecond,bSecond)){
+                    String temp = getLocationFromLatlng(listViewRoutes.getContext(),coords.get(i).get(0).latitude,coords.get(i).get(0).longitude);
+                    if(temp == null){
+                        Toast.makeText(this, "Route intersects with obstruction", Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(this, "Route intersects with obstruction at "+ temp, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+            if(coords.get(i).size() == 3) {
+
+            }
+            if(coords.get(i).size() == 4) {
+
+            }
+        }
     }
 }
 

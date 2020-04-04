@@ -17,12 +17,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ID: A00000000"/>
+        android:text="ID: A00893016"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Name: "/>
+        android:text="Name: Norman Chiu "/>
 
     <TextView
         android:layout_width="match_parent"
@@ -39,12 +39,6 @@
         android:layout_height="wrap_content"
         android:maxLines="10"
         android:lines="10"
-        android:text="\nLorem ipsum dolor sit amet,\n
-        consectetur adipisicing elit,\n
-        sed do eiusmod tempor incididunt\n
-        ut labore et dolore magna aliqua.\n
-        Ut enim ad minim veniam,\n
-        quis nostrud exercitation ullamco\n
-        laboris nisi ut aliquip ex ea commodo consequat.\n"/>
+        android:text="A mobile app that is used to help drivers avoid roads with construction or closure."/>
 
 </LinearLayout>
