@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Scanner;
 
 import ca.bcit.avoidit.model.UserRoute;
 
@@ -196,16 +197,21 @@ public class RouteDetailActivity extends AppCompatActivity implements TimePicker
 
                     //Extract time from our time field.
                     String time = (String) currentTime.getText();
-                    //almost there
+                    time = time.replace(':', ' ');
+                    Scanner scanner = new Scanner(time);
+                    int newHour = scanner.nextInt();
+                    int newMinute = scanner.nextInt();
 
-                    //Set alarms for today(?) + the next six days.
-                    calendar.set(Calendar.HOUR, 1);
-                    calendar.set(Calendar.MINUTE, 1);
+                    //Set alarms for today + the next six days.
+                    calendar.set(Calendar.HOUR_OF_DAY, newHour);
+                    calendar.set(Calendar.MINUTE, newMinute);
+                    calendar.set(Calendar.SECOND, 0);
 
                     for (int i = 0; i < 7; i++) {
                         setAlarm(calendar, calendar.get(Calendar.DAY_OF_WEEK));
                         calendar.add(Calendar.DATE, 1);
                     }
+                    scanner.close();
                 }
                 finish();
             }
@@ -247,7 +253,7 @@ public class RouteDetailActivity extends AppCompatActivity implements TimePicker
             Intent intent = new Intent(this, AlertReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this, dayOfWeek - 1, intent, 0);
 
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
 
         }
     }

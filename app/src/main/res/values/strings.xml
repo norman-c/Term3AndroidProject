@@ -22,6 +22,7 @@
     <string name="route_view_time_to_send">Time to Send Notification</string>
     <string name="btn_save_changes">Save Changes</string>
     <string name="btn_delete_route">Delete Route</string>
+    <string name="btn_edit_time">Set Time</string>
     <string name="btn_s" translatable="false">S</string>
     <string name="btn_m" translatable="false">M</string>
     <string name="btn_t" translatable="false">T</string>

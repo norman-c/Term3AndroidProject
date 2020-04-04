@@ -6,6 +6,7 @@
     <string name="btn_save_changes">Sauvegarder les modifications</string>
     <string name="btn_view_obstructions">" Afficher les obstructions"</string>
     <string name="btn_view_routes">Afficher vos itinéraires</string>
+    <string name="btn_edit_time">Régler le temps</string>
     <string name="edt_end_location">Fin Emplacement</string>
     <string name="edt_route_name">Nom de l\'itinéraire</string>
     <string name="edt_start_location">Lieu de départ</string>
@@ -30,4 +31,6 @@
     <string name="txt_to">De</string>
     <string name="txt_view_location">" Afficher l'emplacement"</string>
     <string name="txt_end" translatable="false">(Le bout)</string>
+    <string name="title_activity_view_maps_obstruction">Carte</string>
+    <string name="title_activity_view_routes_map">Carte</string>
 </resources>
