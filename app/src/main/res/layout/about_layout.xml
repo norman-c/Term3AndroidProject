@@ -7,38 +7,50 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
         android:text="ID: A01063968" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:text="Name: Paolo Del Rio" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
         android:text="ID: A00893016"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:text="Name: Norman Chiu "/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
         android:text="ID: A01005378"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:text="Name: Kihyun Choi"/>
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="5dp"
         android:maxLines="10"
         android:lines="10"
-        android:text="A mobile app that is used to help drivers avoid roads with construction or closure."/>
+        android:textSize="20sp"
+        android:text="A mobile app that is used\nto help drivers avoid roads\nwith construction or closure."/>
 
 </LinearLayout>

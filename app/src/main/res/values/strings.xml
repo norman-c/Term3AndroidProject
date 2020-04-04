@@ -3,6 +3,7 @@
     <string name="drawer_open" translatable="false">drawer_open</string>
     <string name="drawer_close" translatable="false">drawer_close</string>
     <string name="btn_view_routes">View Your Routes</string>
+    <string name="btn_view_route">View Route</string>
     <string name="btn_add_route">Add Route</string>
     <string name="btn_view_obstructions">View Obstructions</string>
     <string name="menu_language">Language</string>

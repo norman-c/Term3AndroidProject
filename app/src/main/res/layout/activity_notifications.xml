@@ -11,7 +11,7 @@
         layout="@layout/toolbar" />
 
     <Switch
-        android:id="@+id/switch2"
+        android:id="@+id/sw_alarm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -20,14 +20,14 @@
         app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/txt_alarm"
         android:layout_width="218dp"
         android:layout_height="21dp"
         android:layout_marginStart="35dp"
         android:layout_marginTop="59dp"
         android:text="@string/notification_push_setting_disable"
         android:textOn="@string/notification_push_setting_enable"
-        app:layout_constraintStart_toEndOf="@+id/switch2"
+        app:layout_constraintStart_toEndOf="@+id/sw_alarm"
         app:layout_constraintTop_toBottomOf="@+id/include" />
 
 

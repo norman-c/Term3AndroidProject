@@ -90,14 +90,7 @@ public class AddRouteActivity extends AppCompatActivity
     private LocationListener locationListener;
 
     private GoogleMap mMap;
-    private LatLng mOrigin;
-    private LatLng mDestination;
     private Polyline mPolyline;
-    ArrayList<LatLng> mMarkerPoints;
-
-    private static final int PLACE_PICKER_REQUEST = 1;
-    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
-            new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,8 +101,6 @@ public class AddRouteActivity extends AppCompatActivity
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
-        mMarkerPoints = new ArrayList<>();
-        mMarkerPoints.clear();
 
         database = FirebaseDatabase.getInstance().getReference("routes");
 
@@ -240,7 +231,7 @@ public class AddRouteActivity extends AppCompatActivity
             }
 
         }
-        
+
     }
 
     private void drawRoute(LatLng a, LatLng b){
@@ -301,14 +292,6 @@ public class AddRouteActivity extends AppCompatActivity
             PolylineOptions opts = new PolylineOptions().addAll(path).color(Color.BLUE).width(5);
             mMap.addPolyline(opts);
         }
-
-//        // Getting URL to the Google Directions API
-//        String url = getDirectionsUrl(a, b);
-//
-//        DownloadTask downloadTask = new DownloadTask();
-//
-//        // Start downloading json data from Google Directions API
-//        downloadTask.execute(url);
     }
 
     private LatLng getLocationFromAddress(Context context, String strAddress)
@@ -335,31 +318,6 @@ public class AddRouteActivity extends AppCompatActivity
             e.printStackTrace();
         }
         return p1;
-    }
-
-
-    private String getDirectionsUrl(LatLng origin,LatLng dest){
-
-        // Origin of route
-        String str_origin = "origin="+origin.latitude+","+origin.longitude;
-
-        // Destination of route
-        String str_dest = "destination="+dest.latitude+","+dest.longitude;
-
-        // Key
-        String key = "key=AIzaSyD3lGC8RKD4XWuKRcEDlnw1es060HF8yhM" ;
-
-        // Building the parameters to the web service
-        String parameters = str_origin+"&"+str_dest+"&"+key;
-
-        // Output format
-        String output = "json";
-
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
-        System.out.println(url);
-
-        return url;
     }
 
     /** A method to download json data from url */
