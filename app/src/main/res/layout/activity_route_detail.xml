@@ -26,8 +26,7 @@
         android:ems="10"
         android:hint="@string/edt_start_location"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/plaintext_route_name"
         app:layout_constraintTop_toBottomOf="@+id/plaintext_route_name" />
 
     <EditText
@@ -38,29 +37,20 @@
         android:ems="10"
         android:hint="@string/edt_end_location"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/plaintext_start_location"
         app:layout_constraintTop_toBottomOf="@+id/plaintext_start_location" />
 
-    <TextView
-        android:id="@+id/textview_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/route_view_status"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/plaintext_end_location" />
 
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="235dp"
-        android:layout_marginTop="245dp"
+        android:layout_width="421dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="58dp"
+        android:layout_marginBottom="57dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_sunday"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/plaintext_end_location" />
 
     <Button
         android:id="@+id/button_save_changes"
@@ -77,119 +67,136 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/btn_delete_route"
-        app:layout_constraintBottom_toBottomOf="@+id/button_save_changes"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Switch
         android:id="@+id/switch_notifications"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/button_sunday"
-        app:layout_constraintStart_toStartOf="@+id/button_sunday" />
+        android:layout_marginStart="30dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textview_notifcations"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button_sunday"
-        android:layout_width="50dp"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginBottom="12dp"
         android:text="@string/btn_s"
-        app:layout_constraintBottom_toTopOf="@+id/button_edit_time"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/button_monday"
+        app:layout_constraintEnd_toStartOf="@+id/button_monday"
+        app:layout_constraintStart_toStartOf="@+id/switch_notifications" />
 
     <Button
         android:id="@+id/button_monday"
         android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="13dp"
         android:text="@string/btn_m"
-        app:layout_constraintBottom_toBottomOf="@+id/button_sunday"
-        app:layout_constraintStart_toEndOf="@+id/button_sunday" />
+        app:layout_constraintBottom_toTopOf="@+id/button_edit_time"
+        app:layout_constraintEnd_toEndOf="@+id/button_tuesday"
+        app:layout_constraintStart_toStartOf="@+id/switch_notifications"
+        app:layout_constraintTop_toBottomOf="@+id/textview_notifcations" />
 
     <Button
         android:id="@+id/button_tuesday"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginStart="53dp"
+        android:layout_marginEnd="52dp"
         android:text="@string/btn_t"
-        app:layout_constraintBottom_toBottomOf="@+id/button_monday"
-        app:layout_constraintStart_toEndOf="@+id/button_monday" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/button_monday"
+        app:layout_constraintEnd_toStartOf="@+id/button_thursday"
+        app:layout_constraintStart_toStartOf="@+id/textview_notifcations" />
 
     <Button
         android:id="@+id/button_wednesday"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginEnd="2dp"
         android:text="@string/btn_w"
-        app:layout_constraintBottom_toBottomOf="@+id/button_tuesday"
-        app:layout_constraintEnd_toStartOf="@+id/button_thursday"
-        app:layout_constraintStart_toEndOf="@+id/button_tuesday" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/button_tuesday"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button_thursday"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginStart="79dp"
+        android:layout_marginEnd="81dp"
         android:text="@string/btn_t"
-        app:layout_constraintBottom_toBottomOf="@+id/button_wednesday"
-        app:layout_constraintEnd_toStartOf="@+id/button_friday" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/button_friday"
+        app:layout_constraintEnd_toEndOf="@+id/textview_tts"
+        app:layout_constraintStart_toEndOf="@+id/textview_current" />
 
     <Button
         android:id="@+id/button_friday"
         android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="47dp"
         android:text="@string/btn_f"
-        app:layout_constraintBottom_toBottomOf="@+id/button_thursday"
-        app:layout_constraintEnd_toStartOf="@+id/button_saturday" />
+        app:layout_constraintBottom_toBottomOf="@+id/button_wednesday"
+        app:layout_constraintEnd_toEndOf="@+id/button_delete_route"
+        app:layout_constraintStart_toStartOf="@+id/button_thursday"
+        app:layout_constraintTop_toTopOf="@+id/button_wednesday" />
 
     <Button
         android:id="@+id/button_saturday"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginStart="49dp"
         android:layout_marginEnd="30dp"
         android:text="@string/btn_s"
-        app:layout_constraintBottom_toBottomOf="@+id/button_friday"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/button_friday"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/button_friday" />
 
     <Button
         android:id="@+id/button_edit_time"
-        android:layout_width="80dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="7dp"
         android:text="@string/btn_edit_time"
         app:layout_constraintBottom_toTopOf="@+id/button_save_changes"
+        app:layout_constraintEnd_toStartOf="@+id/textview_current"
         app:layout_constraintStart_toStartOf="@+id/button_sunday" />
 
     <TextView
         android:id="@+id/textview_tts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginBottom="22dp"
         android:text="@string/route_view_time_to_send"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/button_edit_time"
-        app:layout_constraintStart_toEndOf="@+id/textview_current"
-        app:layout_constraintTop_toTopOf="@+id/button_edit_time"
-        app:layout_constraintVertical_bias="0.541" />
+        app:layout_constraintBottom_toTopOf="@+id/button_delete_route"
+        app:layout_constraintStart_toEndOf="@+id/button_save_changes" />
 
     <TextView
         android:id="@+id/textview_notifcations"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginBottom="76dp"
         android:text="@string/route_view_notifications"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/switch_notifications"
-        app:layout_constraintStart_toEndOf="@+id/switch_notifications"
-        app:layout_constraintTop_toTopOf="@+id/switch_notifications" />
+        app:layout_constraintBottom_toTopOf="@+id/button_edit_time"
+        app:layout_constraintStart_toEndOf="@+id/switch_notifications" />
 
     <TextView
         android:id="@+id/textview_current"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/txt_error"
-        app:layout_constraintBottom_toBottomOf="@+id/button_edit_time"
-        app:layout_constraintStart_toEndOf="@+id/button_edit_time"
-        app:layout_constraintTop_toTopOf="@+id/button_edit_time" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/textview_tts"
+        app:layout_constraintEnd_toStartOf="@+id/textview_tts" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

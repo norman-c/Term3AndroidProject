@@ -93,7 +93,6 @@ public class RouteDetailActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.AppThemeDark);
         setContentView(R.layout.activity_route_detail);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
