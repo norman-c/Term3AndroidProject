@@ -148,6 +148,8 @@ public class MainActivity extends AppCompatActivity
                             }
                             coords.add(tempArray);
                         }
+                    }else{
+                        System.out.println("GeometryCollection type not supported");
                     }
                 }
 
@@ -177,7 +179,7 @@ public class MainActivity extends AppCompatActivity
                             coords2.add(tempArray);
                         }
 
-                    }else if(records.get(i).getFields().getGeom().getType().equals("LineString")){
+                    }else if(records2.get(i).getFields().getGeom().getType().equals("LineString")){
                         for (int j = 0; j < temp.size(); j++) {
                             ArrayList<LatLng> tempArray = new ArrayList<>();
                             for(int k = 0; k < temp.size(); k++){
@@ -186,7 +188,7 @@ public class MainActivity extends AppCompatActivity
                                 double y = (double) arrayListTemp.get(1);
                                 tempArray.add(new LatLng(y, x));
                             }
-                            coords.add(tempArray);
+                            coords2.add(tempArray);
                         }
                     }
                 }
